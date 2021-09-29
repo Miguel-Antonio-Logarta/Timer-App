@@ -1,0 +1,8 @@
+{
+    "name": "Timer: An app for your productivity needs",
+    "short_name": "Timer",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#fff",
+    "description": "A pomodoro timer app that can track your progress and set goals."
+}

@@ -1,0 +1,232 @@
+/* .App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} */
+
+/* .App {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 25%;
+  margin: 0;
+  background-color: red;
+}
+
+.brand {
+  margin: 0;
+  padding: 7px 0;
+  cursor: pointer;
+  font-size: 38px;
+  font-weight: 300;
+}
+
+.nav-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-item {
+  display: inline-block;
+  padding: 20px;
+}
+
+.nav-item a {
+  font-size: 14px;
+  text-decoration: none;
+} */
+
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.3.6,
+* Autoprefixer: v10.3.1
+* Browsers: last 4 version
+*/
+
+:root {
+  --backgroundURL: url(./../resources/backgroundCafe.jpg);
+}
+
+.the-app {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  align-content: stretch;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+}
+
+/* Header CSS */
+header {
+  /* padding: 0 25%; */
+  margin: 0;
+}
+
+.inner-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  /* margin: 0; */
+  margin: 0 auto;
+  border-bottom: 2px solid white;
+  width: 600px;
+  /* min-width: 600px */
+}
+
+.brand {
+  color: white;
+  margin: 0;
+  padding: 7px 20px;
+  cursor: pointer;
+  font-size: 38px;
+  font-weight: 300;
+  text-shadow: 1px 1px 20px black;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: stretch;
+}
+
+.nav-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+}
+
+
+/* Nav item needs to be fixed to be full. Only the text can be selected atm */
+.nav-item {
+  /* display: inline-block; */
+  display: flex;
+  align-items: stretch;
+  padding: 0 20px;
+}
+
+.nav-item a {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 14px;
+  text-decoration: none;
+  overflow: hidden;
+  text-shadow: 1px 1px 20px black;
+  /* margin-left: 5px; */
+}
+
+.nav-item a span {
+  margin-left: 5px;
+}
+
+/* Background CSS */
+.background {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-image: var(--backgroundURL);
+  filter: brightness(0.5);
+  z-index: -9999;
+  background-size: cover;
+}
+
+/* Timer CSS */
+.timer {
+  transform: translateY(-25%) ;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  flex-direction: column;
+}
+
+.timer-selection {
+  border-bottom: 2px solid white;
+}
+
+.timer-button, .timer-control {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  padding: 20px;
+  color: white;
+  background-color: rgba(0,0,0,0);
+  /* border: 1px solid white; */
+  border: none;
+  text-shadow: 1px 1px 20px black;
+  text-align: center;
+  text-decoration: none;
+}
+
+.timer-display {
+  font-size: 128px;
+}
+
+.timer-control {
+  border-top: 2px solid white;
+}
+
