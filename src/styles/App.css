@@ -243,7 +243,7 @@ header {
   border-bottom: 2px solid white;
 }
 
-.timer-button, .timer-control {
+.timer-button, .timer-pause-play, .timer-skip{
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   padding: 20px;
@@ -256,11 +256,13 @@ header {
   text-decoration: none;
 }
 
+.timer-control {
+  border-top: 2px solid white;
+}
+
 .timer-display {
   font-size: 128px;
 }
 
-.timer-control {
-  border-top: 2px solid white;
-}
+
 

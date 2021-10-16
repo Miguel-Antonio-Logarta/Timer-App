@@ -2,10 +2,8 @@ import React from "react";
 import moment from 'moment';
 
 // TODOS:
-// Stop when timer reaches zero
 // Add sound effect for when timer reaches zero, when timer pauses, when timer plays
-// Add feature to change timer value with long break, short break, and pomodoro
-// One event handling function
+// Add a warning whenever the user tries to switch timers or skip the timer.
 class Timer extends React.Component {
     constructor(props) {
         super(props);
@@ -36,6 +34,9 @@ class Timer extends React.Component {
         {
             this.setState({currentTime: moment.duration(this.state.currentTime.asMilliseconds() - 1000)});
         }
+        else {
+            this.setState({paused: true});
+        }
 
         // Make sure to end the tick once duration reaches 0 and reset it.
     }
@@ -54,7 +55,13 @@ class Timer extends React.Component {
                 this.setState({currentTime: moment.duration(15*60*1000 + 0*1000), paused: true});
                 break;
             case "pause":
-                this.setState({paused: !this.state.paused});
+                // The button will only do something if the timer is not zero.
+                if (this.state.currentTime.as('milliseconds') > 0) {
+                    this.setState({paused: !this.state.paused});
+                }
+                break;
+            case "skip":
+                this.setState({currentTime: moment.duration(0), paused: true});
                 break;
             default:
                 break;
@@ -63,17 +70,19 @@ class Timer extends React.Component {
 
     render () {
         return (
-            // <div className="timer-wrapper">
-                <div className="timer">
-                    <div className="timer-selection">
-                        <button className="timer-button" name="pomodoro" onClick={this.handleButtonClick}>Pomodoro</button>
-                        <button className="timer-button" name="short_break" onClick={this.handleButtonClick}>Short Break</button>
-                        <button className="timer-button" name="long_break" onClick={this.handleButtonClick}>Long Break</button>
-                    </div>
-                    <div className="timer-display">{moment.utc(this.state.currentTime.asMilliseconds()).format("mm:ss")}</div>
-                    <button className="timer-control" name="pause" onClick={this.handleButtonClick}>{this.state.paused ? "Play" : "Pause"}</button>
+            <div className="timer">
+                <div className="timer-selection">
+                    <button className="timer-button" name="pomodoro" onClick={this.handleButtonClick}>Pomodoro</button>
+                    <button className="timer-button" name="short_break" onClick={this.handleButtonClick}>Short Break</button>
+                    <button className="timer-button" name="long_break" onClick={this.handleButtonClick}>Long Break</button>
                 </div>
-            // </div>
+                <div className="timer-display">{moment.utc(this.state.currentTime.asMilliseconds()).format("mm:ss")}</div>
+                <div className="timer-control">
+                    <button className="timer-pause-play" name="pause" onClick={this.handleButtonClick}>{this.state.paused ? "Play" : "Pause"}</button>
+                    {this.state.currentTime.as('milliseconds') > 0 &&
+                    <button className="timer-skip" name="skip" onClick={this.handleButtonClick}>Skip</button>}
+                </div>
+            </div>
         )
     }
 }
