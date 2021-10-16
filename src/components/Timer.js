@@ -1,17 +1,19 @@
 import React from "react";
 import moment from 'moment';
 
+// TODOS:
+// Stop when timer reaches zero
+// Add sound effect for when timer reaches zero, when timer pauses, when timer plays
+// Add feature to change timer value with long break, short break, and pomodoro
+// One event handling function
 class Timer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             paused: true,
-            buttonText: "Play",
-            currentTime: moment.duration(25*60*1000), // Sets a 25 minutes counter in milliseconds
-            // currentTime: moment.duration(10*1000)
+            // currentTime: moment.duration(25*60*1000), // Sets a 25 minutes counter in milliseconds
+            currentTime: moment.duration(10*1000),
         }
-
-        this.handlePause = this.handlePause.bind(this);
     }
 
     componentDidMount() {
@@ -29,7 +31,8 @@ class Timer extends React.Component {
     }
 
     tick() {
-        if (!this.state.paused)
+        const isZero = this.state.currentTime.as('milliseconds') <= 0; 
+        if (!this.state.paused && !isZero)
         {
             this.setState({currentTime: moment.duration(this.state.currentTime.asMilliseconds() - 1000)});
         }
@@ -37,25 +40,25 @@ class Timer extends React.Component {
         // Make sure to end the tick once duration reaches 0 and reset it.
     }
 
-    handlePause(event) {
-        // The button text is not working for some reason. The first play does not change
-        // Reason: setState calls are asynchronous for performance reasons, relying on them for instand change will cause issues.
-        // Issue fixed**: use {this.state.paused ? "Play" : "Pause"} in the button tag instead of having it be the value of this.state.buttonText
-        const isPaused = this.state.paused;
-        if (isPaused) {
-            // The timer is paused, the button should say play
-            this.setState({buttonText: "Play", paused: false});
-            console.log("Play");
-            console.log(this.state);
+    handleButtonClick = (evt) => {
+        const btn = evt.target;
+        console.log(btn.name);
+        switch (btn.name) {
+            case "pomodoro":
+                this.setState({currentTime: moment.duration(25*60*1000 + 0*1000), paused: true});
+                break;
+            case "short_break":
+                this.setState({currentTime: moment.duration(5*60*1000 + 0*1000), paused: true});
+                break;
+            case "long_break":
+                this.setState({currentTime: moment.duration(15*60*1000 + 0*1000), paused: true});
+                break;
+            case "pause":
+                this.setState({paused: !this.state.paused});
+                break;
+            default:
+                break;
         }
-        else {
-            // The timer is playing, the button should say pause
-            this.setState({buttonText: "Pause", paused: true});
-            console.log("Paused");
-            console.log(this.state);
-        }
-
-        event.preventDefault();
     }
 
     render () {
@@ -63,13 +66,12 @@ class Timer extends React.Component {
             // <div className="timer-wrapper">
                 <div className="timer">
                     <div className="timer-selection">
-                        <button className="timer-button">Pomodoro</button>
-                        <button className="timer-button">Short Break</button>
-                        <button className="timer-button">Long Break</button>
+                        <button className="timer-button" name="pomodoro" onClick={this.handleButtonClick}>Pomodoro</button>
+                        <button className="timer-button" name="short_break" onClick={this.handleButtonClick}>Short Break</button>
+                        <button className="timer-button" name="long_break" onClick={this.handleButtonClick}>Long Break</button>
                     </div>
                     <div className="timer-display">{moment.utc(this.state.currentTime.asMilliseconds()).format("mm:ss")}</div>
-                    <button className="timer-control" onClick={this.handlePause}>{this.state.paused ? "Play" : "Pause"}</button>
-                    {/* <button className="timer-control">Play/Pause</button> */}
+                    <button className="timer-control" name="pause" onClick={this.handleButtonClick}>{this.state.paused ? "Play" : "Pause"}</button>
                 </div>
             // </div>
         )

@@ -165,17 +165,51 @@ header {
   display: flex;
   align-items: stretch;
   padding: 0 20px;
+  color: white;
+  font-size: 14px;
+  text-decoration: none;
+  text-shadow: 1px 1px 20px black;
+  transition: color .3s, background-color .3s;
+  cursor: pointer;
+}
+
+.nav-item button {
+  display: flex;
+  align-items: center;
+  /* color: white;
+  font-size: 14px;
+  text-decoration: none; */
+  overflow: hidden;
+  /* text-shadow: 1px 1px 20px black; */
+  /* margin-left: 5px; */
+  color: inherit;
+  font-size: inherit;
+  text-decoration: inherit;
+  text-shadow: inherit;
+  background: none;
+  border: none;
+}
+
+.nav-item:hover {
+  color: black;
+  text-shadow: none;
+  background-color: white;
+  transition: color .3s, background-color .3s;
 }
 
 .nav-item a {
   display: flex;
   align-items: center;
-  color: white;
+  /* color: white;
   font-size: 14px;
-  text-decoration: none;
+  text-decoration: none; */
   overflow: hidden;
-  text-shadow: 1px 1px 20px black;
+  /* text-shadow: 1px 1px 20px black; */
   /* margin-left: 5px; */
+  color: inherit;
+  font-size: inherit;
+  text-decoration: inherit;
+  text-shadow: inherit;
 }
 
 .nav-item a span {
