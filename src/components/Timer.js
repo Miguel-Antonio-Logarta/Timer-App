@@ -3,7 +3,7 @@ import moment from 'moment';
 
 // TODOS:
 // Add sound effect for when timer reaches zero, when timer pauses, when timer plays
-// Add a warning whenever the user tries to switch timers or skip the timer.
+// Add a warning whenever the user tries to switch timers or skip the timer. <- forget this. People know what they want. They don't need a warning.
 class Timer extends React.Component {
     constructor(props) {
         super(props);
