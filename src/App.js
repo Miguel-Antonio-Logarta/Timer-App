@@ -1,51 +1,49 @@
 import './styles/App.css';
 import Timer from './components/Timer.js';
-// import ATestButton from './components/ATestButton';
-import Navbar from './components/Navbar';
-import Background from './components/Background';
+import Navbar from './components/Navbar.js';
+import Settings from './components/Settings.js';
+import Background from './components/Background.js';
+import Todos from "./components/Todos.js"
+import User from "./components/User.js"
 import React from 'react';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // showModal: false
-      showSettings: false,
-      showStats: false,
-      showLogin: false
+      toggle: "Home"
     };
-    
-    this.showSettingsWindow = this.showSettingsWindow.bind(this);
-    this.showStatsWindow = this.showStatsWindow.bind(this);
-    this.showLoginWindow = this.showLoginWindow.bind(this);
-    // this.toggleModal = this.toggleModal.bind(this);
   }
 
-  // TODO: change all of this and turn it into one function.
-  // handleNavButtonClick(whichwindowtoshow)
-  showSettingsWindow () {
-    console.log("Settings are now showing");
-    this.setState({showSettings: !this.state.showSettings});
+  handleNavButtonClick = (evt) => {
+    this.setState({toggle: evt.target.name});
   }
 
-  showStatsWindow () {
-    console.log("Stats are now showing");
-    this.setState({showStats: !this.state.showStats});
-  }
-
-  showLoginWindow () {
-    this.setState({showLogin: !this.state.showLogin});
+  showComponentToWebpage = (name) => {
+    // Depending on the name, show the corect component.
+    switch(name) {
+      case "Home":
+        return <Timer />
+      case "Todos":
+        return <Todos />
+      case "Settings":
+        return <Settings />
+      case "User":
+        return <User />
+      default:
+        break;
+    }
   }
 
   render() {
     return (
       <div className="the-app">
         <Navbar 
-          showLoginWindow={this.showLoginWindow}
-          showStatsWindow={this.showStatsWindow}
-          showSettingsWindow={this.showSettingsWindow}
+          handleNavButtonClick={this.handleNavButtonClick}    // Pass the button event to the navbar's components
         />
-        <Timer />
+
+        {this.showComponentToWebpage(this.state.toggle)       // Call this function to display the proper component
+        }
         <Background />
       </div>
     );

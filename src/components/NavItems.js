@@ -5,9 +5,9 @@ class NavItems extends React.Component {
     render() {
         return(
             <li className="nav-item">
-                <button href="#" onClick={this.props.toggle}>
+                <button name={this.props.name} onClick={this.props.toggle}>
                     {this.props.icon}
-                    <span>{this.props.title}</span>
+                    <span className="no-events">{this.props.title}</span>
                 </button>
             </li>
         );

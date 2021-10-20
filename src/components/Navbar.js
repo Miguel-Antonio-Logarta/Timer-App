@@ -13,10 +13,10 @@ class Navbar extends React.Component {
                     <h1 className="brand">Timer</h1>
                     <nav className="nav-menu">
                         <ul className="nav-links">
-                            <NavItems title="Home" toggle={this.props.showSettingsWindow} icon={<MdTimer size="24px"/>} />
-                            <NavItems title="To-dos" toggle={this.props.showSettingsWindow} icon={<MdEventNote size="24px"/>} />
-                            <NavItems title="Settings" toggle={this.props.showSettingsWindow} icon={<MdSettings size="24px"/>} />
-                            <NavItems title="User" toggle={this.props.showStatsWindow} icon={<MdAccountCircle size="24px"/>} />
+                            <NavItems title="Home" name="Home" toggle={this.props.handleNavButtonClick} icon={<MdTimer className="no-events" size="24px"/>} />
+                            <NavItems title="To-dos" name="Todos" toggle={this.props.handleNavButtonClick} icon={<MdEventNote className="no-events" size="24px"/>} />
+                            <NavItems title="Settings" name="Settings" toggle={this.props.handleNavButtonClick} icon={<MdSettings className="no-events" size="24px"/>} />
+                            <NavItems title="User" name="User" toggle={this.props.handleNavButtonClick} icon={<MdAccountCircle className="no-events" size="24px"/>} />
                         </ul>
                     </nav>
                 </div>

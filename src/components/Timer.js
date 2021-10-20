@@ -8,8 +8,8 @@ class Timer extends React.Component {
         super(props);
         this.state = {
             paused: true,
-            // currentTime: moment.duration(25*60*1000), // Sets a 25 minutes counter in milliseconds
-            currentTime: moment.duration(10*1000),
+            currentTime: moment.duration(25*60*1000), // Sets a 25 minutes counter in milliseconds
+            // currentTime: moment.duration(10*1000),
         }
     }
 
@@ -28,6 +28,7 @@ class Timer extends React.Component {
     }
 
     tick() {
+        console.log("tick");
         const isZero = this.state.currentTime.as('milliseconds') <= 0; 
         if (!this.state.paused && !isZero)
         {
@@ -36,7 +37,6 @@ class Timer extends React.Component {
         else {
             this.setState({paused: true});
         }
-
         // Make sure to end the tick once duration reaches 0 and reset it.
     }
 

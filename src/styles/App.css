@@ -184,5 +184,8 @@ header {
   font-size: 128px;
 }
 
-
+/* Prevents element from becoming event.target when clicked */
+.no-events {
+  pointer-events: none;
+}
 
