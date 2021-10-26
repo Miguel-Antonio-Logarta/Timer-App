@@ -6,11 +6,13 @@ class Navbar extends React.Component {
     // Home leads you back to the timer
     // Todos opens the todo lists on the sidebar
     // Settings also opens a sidebar where you can adjust the settings
+    // TODO: When the user presses the logo, it should refresh the page or show the timer.
     render() {
         return (
             <header>
                 <div className="inner-header">
-                    <h1 className="brand">Timer</h1>
+                    <h1 className="brand">Timers</h1>
+                    <span className="app-description">A productivity app</span>
                     <nav className="nav-menu">
                         <ul className="nav-links">
                             <NavItems title="Home" name="Home" toggle={this.props.handleNavButtonClick} icon={<MdTimer className="no-events" size="24px"/>} />

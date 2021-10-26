@@ -5,7 +5,7 @@ class NavItems extends React.Component {
     render() {
         return(
             <li className="nav-item">
-                <button name={this.props.name} onClick={this.props.toggle}>
+                <button className="cursor-pointer" name={this.props.name} onClick={this.props.toggle}>
                     {this.props.icon}
                     <span className="no-events">{this.props.title}</span>
                 </button>

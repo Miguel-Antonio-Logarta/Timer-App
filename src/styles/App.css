@@ -7,6 +7,7 @@
 
 :root {
   --backgroundURL: url(./../resources/backgroundCafe.jpg);
+  --backgroundColor: #1A1325;
 }
 
 .the-app {
@@ -51,9 +52,13 @@ header {
   align-items: stretch;
   /* margin: 0; */
   margin: 0 auto;
-  border-bottom: 2px solid white;
-  width: 600px;
+  /* border-bottom: 2px solid white; */
+  width: 800px;
+  padding: 0px 50px;
   /* min-width: 600px */
+  backdrop-filter: blur(10px) brightness(60%);
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
 
 .brand {
@@ -64,6 +69,16 @@ header {
   font-size: 38px;
   font-weight: 300;
   text-shadow: 1px 1px 20px black;
+}
+
+.app-description {
+  color: white;
+  padding: 20px 20px 20px 0px;
+  font-size: 14px;
+  text-shadow: 1px 1px 20px black;
+  font-weight: 400;
+  position: relative;
+  top: 2px;
 }
 
 .nav-menu {
@@ -84,7 +99,8 @@ header {
   /* display: inline-block; */
   display: flex;
   align-items: stretch;
-  padding: 0 20px;
+  /* padding: 10px 20px; */
+  /* padding: 0px 20px; */
   color: white;
   font-size: 14px;
   text-decoration: none;
@@ -108,12 +124,22 @@ header {
   text-shadow: inherit;
   background: none;
   border: none;
+  padding: 20px;
+}
+
+.nav-item button span {
+  margin-left: 8px;
 }
 
 .nav-item:hover {
-  color: black;
+  color: white;
   text-shadow: none;
-  background-color: white;
+  background-color: rgba(255,255,255,0.1);
+  transition: color .3s, background-color .3s;
+}
+
+.nav-item:active {
+  background-color: rgba(255,255,255,0.2);
   transition: color .3s, background-color .3s;
 }
 
@@ -144,48 +170,144 @@ header {
   left: 0;
   right: 0;
   background-image: var(--backgroundURL);
+  /* background-color: var(--backgroundColor); */
   filter: brightness(0.5);
   z-index: -9999;
   background-size: cover;
 }
 
+.home-wrapper {
+  display: flex;
+  flex-flow: column wrap;
+  margin: 0 auto;
+}
 /* Timer CSS */
 .timer {
-  transform: translateY(-25%) ;
-  margin: auto;
+  /* transform: translateY(-25%); */
+  /* margin: 0 auto; */
+  margin-top: 15%;
   display: flex;
-  align-items: center;
-  align-content: center;
-  flex-direction: column;
+  /* align-items: center; */
+  /* align-content: center; */
+  /* flex-direction: column; */
+  /* flex-wrap: wrap; */
+  flex-flow: column wrap;
+  width: 500px;
+  backdrop-filter: blur(10px) brightness(60%);
+  /* background-color: white; */
+  border-radius: 10px;
+  /* border: 1px solid white; */
+  padding: 0 50px;
 }
 
-.timer-selection {
-  border-bottom: 2px solid white;
+.timer-selection, .timer-control {
+  display: flex;
+  /* align-content: stretch; */
 }
 
-.timer-button, .timer-pause-play, .timer-skip{
+.timer-button {
+  color: white;
+  flex-grow: 1;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   padding: 20px;
-  color: white;
   background-color: rgba(0,0,0,0);
-  /* border: 1px solid white; */
-  border: none;
   text-shadow: 1px 1px 20px black;
   text-align: center;
   text-decoration: none;
+  transition: color .3s, background-color .3s;
+  border: none;
 }
 
-.timer-control {
-  border-top: 2px solid white;
+.timer-button:hover {
+  background-color: rgba(255,255,255,0.1);
 }
+
+.timer-button:active {
+  background-color: rgba(255,255,255,0.2);
+}
+
+/* .timer-button-select {
+
+}
+
+.timer-button-control {
+
+} */
 
 .timer-display {
-  font-size: 128px;
+  font-size: 180px;
+  text-align: center;
+  /* color: #E3D0DB; */
+  color: white;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
 }
 
 /* Prevents element from becoming event.target when clicked */
 .no-events {
   pointer-events: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.remaining-todos {
+  margin-top: 50px;
+  padding: 25px 50px;
+  width: 500px;
+  backdrop-filter: blur(10px) brightness(60%);
+  display: flex;
+  flex-direction: row;
+  border-radius: 10px;
+  align-content: stretch;
+  font-size: 14px;
+}
+
+.left-portion {
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.upper-portion {
+  display: inline-flex;
+  flex-wrap: nowrap;
+}
+
+.upper-portion h3{
+  font-size: 16px;
+}
+
+.right-portion {
+  display: flex;
+  padding-left: 50px;
+  border-left: 1px solid white;
+}
+
+.right-portion button{
+  margin: auto 0;
+  width: 75px;
+  height: 75px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  background-color: rgba(255,255,255,0.1);
+  transition: color .3s, background-color .3s;
+}
+
+.right-portion button:hover {
+  background-color: rgba(255,255,255,0.2);
+  transition: color .3s, background-color .3s;
+}
+
+.right-portion button:active {
+  color: black;
+  background-color: rgba(255,255,255,1);
+  transition: color .3s, background-color .3s;
+}
+.upper-portion {
+  display: inline;
 }
 

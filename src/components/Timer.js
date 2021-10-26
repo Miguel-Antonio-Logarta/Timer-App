@@ -3,20 +3,25 @@ import moment from 'moment';
 
 // TODOS:
 // Add sound effect for when timer reaches zero, when timer pauses, when timer plays
+// Pass down settings
 class Timer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             paused: true,
-            currentTime: moment.duration(25*60*1000), // Sets a 25 minutes counter in milliseconds
+            // currentTime: moment.duration(25*60*1000), // Sets a 25 minutes counter in milliseconds
+            currentTime: moment.duration(this.props.settings.timers["pomodoro"], 'seconds'),
             // currentTime: moment.duration(10*1000),
+            ring: false
         }
     }
 
     componentDidMount() {
-        console.log(this.state.currentTime)
-        console.log(moment.utc(this.state.currentTime.asMilliseconds()).format("mm:ss"))
-
+        // console.log(this.state.currentTime)
+        // console.log(moment.utc(this.state.currentTime.asMilliseconds()).format("mm:ss"))
+        // console.log(this.props.settings);
+        
+        // When the component mounts, start a clock that the timer will depend on
         this.timerID = setInterval(
             () => this.tick(),
             1000
@@ -28,7 +33,8 @@ class Timer extends React.Component {
     }
 
     tick() {
-        console.log("tick");
+        // console.log("tick");
+
         const isZero = this.state.currentTime.as('milliseconds') <= 0; 
         if (!this.state.paused && !isZero)
         {
@@ -36,6 +42,11 @@ class Timer extends React.Component {
         }
         else {
             this.setState({paused: true});
+
+            if (isZero && !this.state.ring) {
+                this.playSound();
+                this.setState({ring: true});
+            }
         }
         // Make sure to end the tick once duration reaches 0 and reset it.
     }
@@ -45,13 +56,13 @@ class Timer extends React.Component {
         console.log(btn.name);
         switch (btn.name) {
             case "pomodoro":
-                this.setState({currentTime: moment.duration(25*60*1000 + 0*1000), paused: true});
+                this.setState({currentTime: moment.duration(this.props.settings.timers["pomodoro"], 'seconds'), paused: true, ring: false});
                 break;
             case "short_break":
-                this.setState({currentTime: moment.duration(5*60*1000 + 0*1000), paused: true});
+                this.setState({currentTime: moment.duration(this.props.settings.timers["short_break"], 'seconds'), paused: true, ring: false});
                 break;
             case "long_break":
-                this.setState({currentTime: moment.duration(15*60*1000 + 0*1000), paused: true});
+                this.setState({currentTime: moment.duration(this.props.settings.timers["long_break"], 'seconds'), paused: true, ring: false});
                 break;
             case "pause":
                 // The button will only do something if the timer is not zero.
@@ -67,6 +78,10 @@ class Timer extends React.Component {
         }
     }
 
+    playSound = () => {
+        alert("ring!!!");
+    }
+
     render () {
         return (
             <div className="timer">
@@ -77,9 +92,9 @@ class Timer extends React.Component {
                 </div>
                 <div className="timer-display">{moment.utc(this.state.currentTime.asMilliseconds()).format("mm:ss")}</div>
                 <div className="timer-control">
-                    <button className="timer-pause-play" name="pause" onClick={this.handleButtonClick}>{this.state.paused ? "Play" : "Pause"}</button>
+                    <button className="timer-pause-play timer-button" name="pause" onClick={this.handleButtonClick}>{this.state.paused ? "Play" : "Pause"}</button>
                     {this.state.currentTime.as('milliseconds') > 0 &&
-                    <button className="timer-skip" name="skip" onClick={this.handleButtonClick}>Skip</button>}
+                    <button className="timer-skip timer-button" name="skip" onClick={this.handleButtonClick}>Skip</button>}
                 </div>
             </div>
         )

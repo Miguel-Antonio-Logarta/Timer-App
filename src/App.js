@@ -1,11 +1,12 @@
 import './styles/App.css';
-import Timer from './components/Timer.js';
 import Navbar from './components/Navbar.js';
 import Settings from './components/Settings.js';
 import Background from './components/Background.js';
-import Todos from "./components/Todos.js"
-import User from "./components/User.js"
+import Todos from "./components/Todos.js";
+import User from "./components/User.js";
 import React from 'react';
+import Home from "./components/Home.js";
+import config from "./components/Data.js"
 
 class App extends React.Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class App extends React.Component {
   }
 
   handleNavButtonClick = (evt) => {
+    console.log(evt.target.name);
     this.setState({toggle: evt.target.name});
   }
 
@@ -23,7 +25,7 @@ class App extends React.Component {
     // Depending on the name, show the corect component.
     switch(name) {
       case "Home":
-        return <Timer />
+        return <Home settings={config} />
       case "Todos":
         return <Todos />
       case "Settings":
