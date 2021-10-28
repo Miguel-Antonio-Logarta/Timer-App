@@ -1,11 +1,10 @@
 import React from "react";
-import Timer from "./Timer.js"
+import Timer from "./Timer";
 
-class Home extends React.Component {
-    render() {
-        return(
+function Home(props) {
+    return(
         <div className="home-wrapper">
-            <Timer settings={this.props.settings}/>
+            <Timer settings={props.settings}/>
             <div className="remaining-todos">
                 <div className="left-portion">
                     <div className="upper-portion">
@@ -21,8 +20,7 @@ class Home extends React.Component {
                 </div>
             </div>
         </div>
-        );
-    }
+    );
 }
 
 export default Home;

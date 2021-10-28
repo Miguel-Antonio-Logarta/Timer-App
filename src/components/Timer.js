@@ -1,104 +1,39 @@
-import React from "react";
+import React, { useEffect } from "react";
 import moment from 'moment';
+import { useDispatch, useSelector } from "react-redux";
+import {tick, setTimer, flipOnOff, skip} from "../state/index";
 
 // TODOS:
 // Add sound effect for when timer reaches zero, when timer pauses, when timer plays
 // Pass down settings
-class Timer extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            paused: true,
-            // currentTime: moment.duration(25*60*1000), // Sets a 25 minutes counter in milliseconds
-            currentTime: moment.duration(this.props.settings.timers["pomodoro"], 'seconds'),
-            // currentTime: moment.duration(10*1000),
-            ring: false
-        }
-    }
+function Timer(props) {
+    const time = useSelector((state) => state.Timer);
+    const dispatch = useDispatch();
 
-    componentDidMount() {
-        // console.log(this.state.currentTime)
-        // console.log(moment.utc(this.state.currentTime.asMilliseconds()).format("mm:ss"))
-        // console.log(this.props.settings);
-        
-        // When the component mounts, start a clock that the timer will depend on
-        this.timerID = setInterval(
-            () => this.tick(),
-            1000
-          );
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.timerID);
-    }
-
-    tick() {
-        // console.log("tick");
-
-        const isZero = this.state.currentTime.as('milliseconds') <= 0; 
-        if (!this.state.paused && !isZero)
-        {
-            this.setState({currentTime: moment.duration(this.state.currentTime.asMilliseconds() - 1000)});
-        }
-        else {
-            this.setState({paused: true});
-
-            if (isZero && !this.state.ring) {
-                this.playSound();
-                this.setState({ring: true});
-            }
-        }
-        // Make sure to end the tick once duration reaches 0 and reset it.
-    }
-
-    handleButtonClick = (evt) => {
-        const btn = evt.target;
-        console.log(btn.name);
-        switch (btn.name) {
-            case "pomodoro":
-                this.setState({currentTime: moment.duration(this.props.settings.timers["pomodoro"], 'seconds'), paused: true, ring: false});
-                break;
-            case "short_break":
-                this.setState({currentTime: moment.duration(this.props.settings.timers["short_break"], 'seconds'), paused: true, ring: false});
-                break;
-            case "long_break":
-                this.setState({currentTime: moment.duration(this.props.settings.timers["long_break"], 'seconds'), paused: true, ring: false});
-                break;
-            case "pause":
-                // The button will only do something if the timer is not zero.
-                if (this.state.currentTime.as('milliseconds') > 0) {
-                    this.setState({paused: !this.state.paused});
-                }
-                break;
-            case "skip":
-                this.setState({currentTime: moment.duration(0), paused: true});
-                break;
-            default:
-                break;
-        }
-    }
-
-    playSound = () => {
-        alert("ring!!!");
-    }
-
-    render () {
-        return (
-            <div className="timer">
+    // Begin a timer once it is mounted.
+    // setInterval will clear once it has been unmounted.
+    // Instead of dispatching a tick, we should do something else instead.
+    useEffect(() => {
+        const interval = setInterval(() => {
+          dispatch(tick());
+        }, 1000);
+        return () => clearInterval(interval);
+      }, [dispatch]);
+    
+    return(
+        <div className="timer">
                 <div className="timer-selection">
-                    <button className="timer-button" name="pomodoro" onClick={this.handleButtonClick}>Pomodoro</button>
-                    <button className="timer-button" name="short_break" onClick={this.handleButtonClick}>Short Break</button>
-                    <button className="timer-button" name="long_break" onClick={this.handleButtonClick}>Long Break</button>
+                    <button className="timer-button" onClick={() => dispatch(setTimer(time.pomodoro))}>Pomodoro</button>
+                    <button className="timer-button" onClick={() => dispatch(setTimer(time.short_break))}>Short Break</button>
+                    <button className="timer-button" onClick={() => dispatch(setTimer(time.long_break))}>Long Break</button>
                 </div>
-                <div className="timer-display">{moment.utc(this.state.currentTime.asMilliseconds()).format("mm:ss")}</div>
+                <div className="timer-display">{moment.utc(time.currentTime.asMilliseconds()).format("mm:ss")}</div>
                 <div className="timer-control">
-                    <button className="timer-pause-play timer-button" name="pause" onClick={this.handleButtonClick}>{this.state.paused ? "Play" : "Pause"}</button>
-                    {this.state.currentTime.as('milliseconds') > 0 &&
-                    <button className="timer-skip timer-button" name="skip" onClick={this.handleButtonClick}>Skip</button>}
+                    <button className="timer-pause-play timer-button" onClick={() => dispatch(flipOnOff())}>Play</button>
+                    <button className="timer-skip timer-button" onClick={() => dispatch(skip())}>Skip</button>
                 </div>
             </div>
-        )
-    }
+    );
 }
 
 export default Timer;
