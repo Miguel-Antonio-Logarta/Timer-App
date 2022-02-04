@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import config from "../other/Data";
 
 // If fetching fails, move todos to local storage and set synced to false
@@ -17,7 +17,7 @@ export const fetchTodosAsync = createAsyncThunk('todos/fetchTodos', async () => 
     if (response.ok) {
         const data = await response.json();
         return data;
-    }
+    } 
 });
 
 export const deleteTodoAsync = createAsyncThunk('todos/deleteTodo', async (id) => {
@@ -34,7 +34,7 @@ export const deleteTodoAsync = createAsyncThunk('todos/deleteTodo', async (id) =
     }
 });
 
-export const createTodoAsync = createAsyncThunk('todos/createTodo', async (data) => {
+export const createTodoAsync = createAsyncThunk('todos/createTodo', async (data, { rejectWithValue }) => {
     const response = await fetch(`http://127.0.0.1:8000/todos/`, {
         method: "POST",
         headers: {
@@ -51,7 +51,41 @@ export const createTodoAsync = createAsyncThunk('todos/createTodo', async (data)
     if (response.ok) {
         const data = await response.json();
         return data;
-    }
+    } 
+
+    // try {
+    //     const response = await fetch(`http://127.0.0.1:8000/todos/`, {
+    //         method: "POST",
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify({
+    //             title: data.title,
+    //             description: data.description,
+    //             timeLeft: data.timeLeft,
+    //             dueDate: data.dueDate,
+    //         })
+    //     })
+    //     const returnData = await response.json();
+    //     return returnData;
+    // } catch (err) {
+    //     return rejectWithValue(err.response);
+    // }
+
+    // try {
+    //   const response = await userAPI.updateById(id, fields)
+    //   return response.data.user
+    // } catch (err) {
+    //   // Use `err.response.data` as `action.payload` for a `rejected` action,
+    //   // by explicitly returning it using the `rejectWithValue()` utility
+    //   return rejectWithValue(err.response.data)
+    // }
+    // if (response.ok) {
+    //     const data = await response.json();
+    //     return data;
+    // } else {
+    //     return rejectWithValue(err.response.payload);
+    // }
 })
 
 export const updateTodoAsync = createAsyncThunk('todos/updateTodo', async (data) => {
@@ -103,20 +137,31 @@ export const todoSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchTodosAsync.fulfilled, (state, action) => {
-                return { ...state, todos: action.payload.todos }
-            })
-            .addCase(deleteTodoAsync.fulfilled, (state, action) => {
-                return { ...state, todos: action.payload.todos }
-            })
-            .addCase(createTodoAsync.fulfilled, (state, action) => {
-                state.todos = action.payload.todos;
-                state.addClicked = false
-            })
-            .addCase(updateTodoAsync.fulfilled, (state, action) => {
-                state.editableId = state.editableId.filter((id) => id !== action.payload.editedTodoId);
-                state.todos = action.payload.todos
-            })
+        .addCase(fetchTodosAsync.fulfilled, (state, action) => {
+            return { ...state, todos: action.payload.todos }
+        })
+        .addCase(deleteTodoAsync.fulfilled, (state, action) => {
+            return { ...state, todos: action.payload.todos }
+        })
+        .addCase(createTodoAsync.fulfilled, (state, action) => {
+            state.todos = action.payload.todos;
+            state.addClicked = false
+        })
+        .addCase(updateTodoAsync.fulfilled, (state, action) => {
+            state.editableId = state.editableId.filter((id) => id !== action.payload.editedTodoId);
+            state.todos = action.payload.todos
+        })
+        // .addCase(fetchTodosAsync.rejected, (state, action) => {
+        //     console.log("There was an error fetching the todos");
+        // })
+        // .addCase(deleteTodoAsync.rejected, (state, action) => {
+        //     console.log("There was an error deleting the todo");
+        //     console.log(action);
+        // })
+        // .addCase(createTodoAsync.rejected, (state, action) => {
+        //     console.log("There was an error creating the todo");
+        //     console.log(action);
+        // })
 
     }
 });
