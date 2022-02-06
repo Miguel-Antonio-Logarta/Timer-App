@@ -6,6 +6,7 @@ import TodoItemEditable from "./TodoItemEditable";
 import { fetchTodosAsync } from "../redux/todoSlice";
 
 function TodoList() {
+    // This is not updating after the fetch request for some reason. It might be the selector or the useEffect hook.
     const { todos, addClicked, editableId } = useSelector((state) => state.todos);
     const dispatch = useDispatch();
 

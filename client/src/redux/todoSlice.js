@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import config from "../other/Data";
+import { camelCaseKeys, snakeCaseKeys } from "../other/utilities";
 
 // If fetching fails, move todos to local storage and set synced to false
 // When user has reconnected to server, sync up todos with database
@@ -43,8 +44,8 @@ export const createTodoAsync = createAsyncThunk('todos/createTodo', async (data,
         body: JSON.stringify({
             title: data.title,
             description: data.description,
-            timeLeft: data.timeLeft,
-            dueDate: data.dueDate,
+            time_left: data.timeLeft,
+            due_date: data.dueDate,
         })
     })
 
@@ -94,14 +95,15 @@ export const updateTodoAsync = createAsyncThunk('todos/updateTodo', async (data)
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            id: data.id,
-            title: data.title,
-            description: data.description,
-            timeLeft: data.timeLeft,
-            dueDate: data.dueDate,
-            completed: data.completed,
-        })
+        // body: JSON.stringify({
+        //     id: data.id,
+        //     title: data.title,
+        //     description: data.description,
+        //     time_left: data.timeLeft,
+        //     due_date: data.dueDate,
+        //     completed: data.completed,
+        // })
+        body: JSON.stringify(snakeCaseKeys(data))
     });
     if (response.ok) {
         const data = await response.json();
@@ -138,10 +140,18 @@ export const todoSlice = createSlice({
     extraReducers: (builder) => {
         builder
         .addCase(fetchTodosAsync.fulfilled, (state, action) => {
-            return { ...state, todos: action.payload.todos }
+            // console.log(action.payload);
+            // console.log(camelCaseKeys(action.payload));
+            return { ...state, todos: camelCaseKeys(action.payload) }
         })
         .addCase(deleteTodoAsync.fulfilled, (state, action) => {
-            return { ...state, todos: action.payload.todos }
+            // state.todos = action.payload.todos;
+            state.editableId = state.editableId.filter((id) => id !== action.payload.id);
+            // return { 
+            //     ...state, 
+            //     todos: action.payload.todos,
+            //     editableId: state.editableId.filter()     
+            // }
         })
         .addCase(createTodoAsync.fulfilled, (state, action) => {
             state.todos = action.payload.todos;

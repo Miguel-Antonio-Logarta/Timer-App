@@ -6,10 +6,12 @@ client/coverage
 client/node_modules
 client/.pnp
 client/pnp.js
+client/src/__tests__
 
 # Components
 client/src/components/Test*
 client/src/other/Data.js
+client/Tests
 
 # Client Misc
 # misc
@@ -27,3 +29,7 @@ client/yarn-error.log*
 # Server files
 server/__pycache__
 server/venv
+server/routers/__pycache__
+
+# Others
+notes.txt

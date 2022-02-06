@@ -1,3 +1,5 @@
+import { camelCase, snakeCase } from 'lodash';
+
 export function convertToHMS(milliseconds) { 
     const hrs = Math.floor(milliseconds/3600000);                       // 3600000ms in an hour
     const mins = Math.floor((milliseconds/60000)-(hrs*60));             // 60000ms in a minute. Get remaining minutes
@@ -9,7 +11,6 @@ export function convertToMilliseconds({hrs, mins, secs}) {
     return (hrs*3600000 + mins*60000 + secs*1000);
 }
 
-
 // This function is untested. Check for edge cases.
 export function convertToHMSString(milliseconds) {
     let { hrs, mins, secs } = convertToHMS(milliseconds);
@@ -18,3 +19,38 @@ export function convertToHMSString(milliseconds) {
     secs = secs >= 10 ? `${secs}` : `0${secs}`;
     return hrs + mins + secs;
 }
+
+// Recursively convert object keys into cameCase
+// Solution found from: https://stackoverflow.com/a/50620653
+export const camelCaseKeys = (obj) => {
+    if (Array.isArray(obj)) {
+      return obj.map(v => camelCaseKeys(v));
+    } else if (obj != null && obj.constructor === Object) {
+      return Object.keys(obj).reduce(
+        (result, key) => ({
+          ...result,
+          [camelCase(key)]: camelCaseKeys(obj[key]),
+        }),
+        {},
+      );
+    }
+    return obj;
+};
+
+// Recursively convert objets keys into snake_case
+export const snakeCaseKeys = (obj) => {
+    if (Array.isArray(obj)) {
+      return obj.map(v => snakeCaseKeys(v));
+    } else if (obj != null && obj.constructor === Object) {
+      return Object.keys(obj).reduce(
+        (result, key) => ({
+          ...result,
+          [snakeCase(key)]: snakeCaseKeys(obj[key]),
+        }),
+        {},
+      );
+    }
+    return obj;
+};
+
+
