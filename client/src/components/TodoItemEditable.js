@@ -3,28 +3,25 @@ import React, { useState, useEffect } from "react";
 import { MdDelete, MdEditCalendar } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { discardChanges, createTodoAsync, updateTodoAsync } from "../redux/todoSlice";
+import { convertToHMS, convertToMilliseconds } from "../other/utilities";
 
 function TodoItemEditable(props) {
-    function convertToHMS(milliseconds) { 
-        const hrs = Math.floor(milliseconds/3600000);                       // 3600000ms in an hour
-        const mins = Math.floor((milliseconds/60000)-(hrs*60));             // 60000ms in a minute. Get remaining minutes
-        const secs = Math.floor((milliseconds/1000)-(hrs*3600)-(mins*60));  // 1000ms in a second. Get remaining seconds
-        return { hrs, mins, secs };
-    }
-
-    function convertToMilliseconds({hrs, mins, secs}) {
-        return (hrs*3600000 + mins*60000 + secs*1000);
-    }
 
     // Props data is yyyy-mm-dd, props timeLeft is an int representing milliseconds
+    // Setting dueDate to null creates an issue somewhere.
+    // Separate data state that we submit and data state that is not related
+    // id, title, description, dueDate, timeLeft in data
+    // newTodo, active, createdOn, completed are not altered in any way.
     const [data, setData] = useState({
         id: props.id ? props.id : null,
-        title: props.title ? props.title : '',
-        description: props.description ? props.description : '',
-        dueDate: props.dueDate ? props.dueDate : '',
+        title: props.title ? props.title : null,
+        description: props.description ? props.description : null,
+        dueDate: props.dueDate ? props.dueDate : null,
         newTodo: props.newTodo ? props.newTodo : false,
         active: props.active ? props.active : false,
-        timeLeft: props.timeLeft ? props.timeLeft: 0,
+        timeLeft: props.timeLeft ? props.timeLeft : null,
+        createdOn: props.createdOn ? props.createdOn : null,
+        completed: props.completed ? props.completed : false,
         ...convertToHMS(props.timeLeft ? props.timeLeft: 0)      // Calculates values for keys "hrs", "mins", "secs" 
     });
 
@@ -41,36 +38,17 @@ function TodoItemEditable(props) {
         })
     }
 
-    const handleSubmit = e => {
-        e.preventDefault();               
-        setIsSubmitting(true);
-        setErrors(validateData(data));     
-    }
-
-    useEffect(() => {
-        if (Object.keys(errors).length === 0 && isSubmitting) {
-            if (data.newTodo) {
-                dispatch(createTodoAsync(data));
-            }
-            else {
-                dispatch(updateTodoAsync(data));
-            }
-            setIsSubmitting(false);
-        }
-    }, [errors, isSubmitting, data, dispatch]);
-
     function validateData(data) {
         let errors = {};
 
-        // Check title validity (exists and char length <= 150)
-        if (data.title.trim().length === 0) {
+        if (data.title == null || data.title.trim().length === 0) {
             errors.title = "Please enter a todo";
         } else if (data.title.trim().length > 150) {
             errors.title = "Character limit reached. Please limit your description to 150 characters";
         }
 
         // Check description character limit
-        if (data.description.length > 1500) {
+        if (data.description != null && data.description.length > 1500) {
             errors.description = "Character limit reached. Please limit your description to 1500 characters";
         }
 
@@ -90,7 +68,7 @@ function TodoItemEditable(props) {
         }
 
         // Check date validity
-        if (data.dueDate.length !== 0) {
+        if (data.dueDate != null && data.dueDate.length !== 0) {
             if (!moment(data.dueDate, "YYYY-MM-DD", true).isValid()) {
                 errors.dueDate="Please enter a valid date";
             }
@@ -99,6 +77,27 @@ function TodoItemEditable(props) {
         return errors;
         
     }
+
+    const handleSubmit = e => {
+        // We have to set errors before set submitting. Otherwsie, useEffect triggers
+        // And finds that Object.keys(errors).length is 0 (We have not checked for errors yet)
+        // And then submits the data. We then get the wrong values passed to the API 
+        e.preventDefault();               
+        setErrors(validateData(data));     
+        setIsSubmitting(true);
+    }
+
+    useEffect(() => {
+        if (Object.keys(errors).length === 0 && isSubmitting) {
+            if (data.newTodo) {
+                dispatch(createTodoAsync(data));
+            }
+            else {
+                dispatch(updateTodoAsync(data));
+            }
+            setIsSubmitting(false);
+        }
+    }, [errors, isSubmitting, data, dispatch]);
 
     return(
         <div className="todo-edit">

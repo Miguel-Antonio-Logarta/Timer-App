@@ -7,12 +7,14 @@ import { fetchTodosAsync } from "../redux/todoSlice";
 
 function TodoList() {
     // This is not updating after the fetch request for some reason. It might be the selector or the useEffect hook.
-    const { todos, addClicked, editableId } = useSelector((state) => state.todos);
+    const { todos, addClicked, editableId, fetchTodo } = useSelector((state) => state.todos);
     const dispatch = useDispatch();
-
+    // console.log(editableId);
+    
     useEffect(() => {
-        dispatch(fetchTodosAsync());
-    }, [dispatch]);
+        if (fetchTodo)
+            dispatch(fetchTodosAsync());
+    }, [dispatch, fetchTodo]);
     
     return (
         <div className="todo_list">
@@ -24,6 +26,8 @@ function TodoList() {
                     title={todo.title}
                     description={todo.description} 
                     timeLeft={todo.timeLeft}
+                    completed={todo.completed}
+                    createdOn={todo.createdOn}
                     dueDate={todo.dueDate}
                     newTodo={false}
                 /> :
@@ -33,6 +37,8 @@ function TodoList() {
                     title={todo.title}
                     description={todo.description} 
                     timeLeft={todo.timeLeft}
+                    completed={todo.completed}
+                    createdOn={todo.createdOn}
                     dueDate={todo.dueDate}
                 />)
             }

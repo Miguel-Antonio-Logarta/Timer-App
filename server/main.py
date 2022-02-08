@@ -1,10 +1,9 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from . import database
-from .routers import todos
 from sqlalchemy.orm import Session
-from .database import SessionLocal, engine, get_db
-from . import models, schemas
+import models
+from database import engine
+from routers import todos
 
 models.Base.metadata.create_all(bind=engine)
 

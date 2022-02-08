@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, Integer, String, Date, TIMESTAMP
 from sqlalchemy.sql.expression import text
-from .database import Base
+from database import Base
 
 
 class Todo(Base):

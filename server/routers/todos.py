@@ -1,10 +1,13 @@
 from fastapi import Response, status, HTTPException, APIRouter, Depends
 from sqlalchemy.orm import Session
-from .. import models, schemas
+from sqlalchemy import desc
 from pydantic import UUID4, BaseModel
 from typing import Optional
 from uuid import uuid4
-from .. import database
+# from .. import models, schemas
+import models
+import schemas
+import database
 # from ..main import get_db
 
 router = APIRouter()
@@ -56,7 +59,8 @@ router = APIRouter()
 
 @router.get("/todos")
 async def get_todos(db: Session = Depends(database.get_db)):
-    return db.query(models.Todo).all()
+    # SELECT * FROM todo ORDER BY completed ASC, created_on DESC;
+    return db.query(models.Todo).order_by(models.Todo.completed.asc(), models.Todo.created_on.desc()).all()
 
 
 @router.get("/todos/{id}")
@@ -77,13 +81,65 @@ async def deleteTodo(id: int, db: Session = Depends(database.get_db)):
     if todo_item.first() is not None:
         todo_item.delete(synchronize_session=False)
         db.commit()
-        return Response(status_code=status.HTTP_204_NO_CONTENT)
+        # return Response(status_code=status.HTTP_204_NO_CONTENT)
+        return {
+            "message": f"Successfully deleted todo with id: {id}",
+            "id": id
+        }
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Server could not find a Todo item with matching id: {id}"
         )
 
+
+@router.post("/todos", status_code=status.HTTP_201_CREATED)
+async def createTodo(todo_item: schemas.TodoCreate, db: Session = Depends(database.get_db)):
+    print(todo_item)
+    # Have it be able to handle arrays 
+    # db.add_all([item1, item2, item3])
+    # db.add(todo_item)
+    new_todo = models.Todo(**todo_item.dict())
+    db.add(new_todo)
+    db.commit()
+    db.refresh(new_todo)
+    return new_todo
+
+
+@router.patch("/todos/{id}")
+async def completeTodo(id: int, db: Session = Depends(database.get_db)):
+    todo_item = db.get(models.Todo, id)
+
+    if todo_item is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Server could not find a Todo item with matching id: {id}"
+        )
+    else:
+        todo_item.completed = True
+        db.add(todo_item)
+        db.commit()
+        db.refresh(todo_item)
+        return todo_item
+
+
+@router.put("/todos/{id}")
+async def updateTodo(id: int, updated_todo_item: schemas.Todo, db: Session = Depends(database.get_db)):
+    todo_item = db.get(models.Todo, id)
+
+    if todo_item is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Server could not find a Todo item with matching id: {id}"
+        )
+    else:
+        for key, value in updated_todo_item.dict().items():
+            setattr(todo_item, key, value)
+        
+        db.add(todo_item)
+        db.commit()
+        db.refresh(todo_item)
+        return todo_item
 
 # @router.post("/todos")
 # async def createTodo(todoItem: TodoItem, status_code=status.HTTP_201_CREATED):

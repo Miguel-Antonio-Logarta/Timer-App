@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import config from "../other/Data";
 import { camelCaseKeys, snakeCaseKeys } from "../other/utilities";
 
 // If fetching fails, move todos to local storage and set synced to false
@@ -9,7 +8,7 @@ import { camelCaseKeys, snakeCaseKeys } from "../other/utilities";
 // when the user is logged in, connect to the database.
 
 export const fetchTodosAsync = createAsyncThunk('todos/fetchTodos', async () => {
-    const response = await fetch("http://127.0.0.1:8000/todos/", { 
+    const response = await fetch("http://127.0.0.1:8000/todos", { 
         method: "GET",
         headers: {
             'Content-Type': 'application/json'
@@ -22,7 +21,6 @@ export const fetchTodosAsync = createAsyncThunk('todos/fetchTodos', async () => 
 });
 
 export const deleteTodoAsync = createAsyncThunk('todos/deleteTodo', async (id) => {
-    // Id should be an int
     const response = await fetch(`http://127.0.0.1:8000/todos/${id}`, { 
         method: "DELETE",
         headers: {
@@ -35,8 +33,8 @@ export const deleteTodoAsync = createAsyncThunk('todos/deleteTodo', async (id) =
     }
 });
 
-export const createTodoAsync = createAsyncThunk('todos/createTodo', async (data, { rejectWithValue }) => {
-    const response = await fetch(`http://127.0.0.1:8000/todos/`, {
+export const createTodoAsync = createAsyncThunk('todos/createTodo', async (data) => {
+    const response = await fetch(`http://127.0.0.1:8000/todos`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -53,57 +51,17 @@ export const createTodoAsync = createAsyncThunk('todos/createTodo', async (data,
         const data = await response.json();
         return data;
     } 
-
-    // try {
-    //     const response = await fetch(`http://127.0.0.1:8000/todos/`, {
-    //         method: "POST",
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify({
-    //             title: data.title,
-    //             description: data.description,
-    //             timeLeft: data.timeLeft,
-    //             dueDate: data.dueDate,
-    //         })
-    //     })
-    //     const returnData = await response.json();
-    //     return returnData;
-    // } catch (err) {
-    //     return rejectWithValue(err.response);
-    // }
-
-    // try {
-    //   const response = await userAPI.updateById(id, fields)
-    //   return response.data.user
-    // } catch (err) {
-    //   // Use `err.response.data` as `action.payload` for a `rejected` action,
-    //   // by explicitly returning it using the `rejectWithValue()` utility
-    //   return rejectWithValue(err.response.data)
-    // }
-    // if (response.ok) {
-    //     const data = await response.json();
-    //     return data;
-    // } else {
-    //     return rejectWithValue(err.response.payload);
-    // }
 })
 
 export const updateTodoAsync = createAsyncThunk('todos/updateTodo', async (data) => {
+    // Clean up the request body
+    const { hrs, mins, secs, newTodo, active, ...requestBody } = data;
     const response = await fetch(`http://127.0.0.1:8000/todos/${data.id}`, { 
         method: "PUT",
         headers: {
             'Content-Type': 'application/json'
         },
-        // body: JSON.stringify({
-        //     id: data.id,
-        //     title: data.title,
-        //     description: data.description,
-        //     time_left: data.timeLeft,
-        //     due_date: data.dueDate,
-        //     completed: data.completed,
-        // })
-        body: JSON.stringify(snakeCaseKeys(data))
+        body: JSON.stringify(snakeCaseKeys(requestBody))
     });
     if (response.ok) {
         const data = await response.json();
@@ -111,13 +69,27 @@ export const updateTodoAsync = createAsyncThunk('todos/updateTodo', async (data)
     }
 });
 
+export const completeTodoAsync = createAsyncThunk('todos/completeTodo', async (id) => {
+    const response = await fetch(`http://127.0.0.1:8000/todos/${id}`, { 
+        method: "PATCH",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    }
+})
+
 export const todoSlice = createSlice({
     name: "todos",
     initialState: {
         todos: [],
         addClicked: false,
         editableId: [],
-        activeId: config.todoActiveId
+        activeId: null,
+        fetchTodo: true
     },
     reducers: {
         editTodo(state, action) {
@@ -128,8 +100,6 @@ export const todoSlice = createSlice({
         },
         setActive(state, action) {},
         discardChanges(state, action) {
-            // Something wrong with action.payload. It is undefined.
-            console.log(JSON.stringify(action.payload, undefined, 2));
             if (action.payload.newTodo) {
                 state.addClicked = false;
             } else {
@@ -140,39 +110,38 @@ export const todoSlice = createSlice({
     extraReducers: (builder) => {
         builder
         .addCase(fetchTodosAsync.fulfilled, (state, action) => {
-            // console.log(action.payload);
-            // console.log(camelCaseKeys(action.payload));
-            return { ...state, todos: camelCaseKeys(action.payload) }
+            return { 
+                ...state, 
+                todos: camelCaseKeys(action.payload), 
+                fetchTodo: false 
+            }
         })
         .addCase(deleteTodoAsync.fulfilled, (state, action) => {
-            // state.todos = action.payload.todos;
-            state.editableId = state.editableId.filter((id) => id !== action.payload.id);
-            // return { 
-            //     ...state, 
-            //     todos: action.payload.todos,
-            //     editableId: state.editableId.filter()     
-            // }
+            return {
+                ...state, 
+                fetchTodo: true
+            }
         })
         .addCase(createTodoAsync.fulfilled, (state, action) => {
-            state.todos = action.payload.todos;
-            state.addClicked = false
+            return {
+                ...state, 
+                addClicked: false, 
+                fetchTodo: true
+            }
         })
         .addCase(updateTodoAsync.fulfilled, (state, action) => {
-            state.editableId = state.editableId.filter((id) => id !== action.payload.editedTodoId);
-            state.todos = action.payload.todos
+            return {
+                ...state,
+                editableId: state.editableId.filter((id) => id !== action.payload.id),
+                fetchTodo: true
+            }
         })
-        // .addCase(fetchTodosAsync.rejected, (state, action) => {
-        //     console.log("There was an error fetching the todos");
-        // })
-        // .addCase(deleteTodoAsync.rejected, (state, action) => {
-        //     console.log("There was an error deleting the todo");
-        //     console.log(action);
-        // })
-        // .addCase(createTodoAsync.rejected, (state, action) => {
-        //     console.log("There was an error creating the todo");
-        //     console.log(action);
-        // })
-
+        .addCase(completeTodoAsync.fulfilled, (state, action) => {
+            return {
+                ...state,
+                fetchTodo: true
+            }
+        })
     }
 });
 

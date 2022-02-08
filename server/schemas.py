@@ -24,10 +24,18 @@ class TodoCreate(TodoBase):
 
 
 class Todo(TodoBase):
-    # Type checking when reading, updating, deleting
     id: int
     completed: bool
-    created_on: datetime
-
+    created_on: datetime    
+    
     class Config:
         orm_mode = True
+
+# class Todo(TodoBase):
+#     # Type checking when reading, updating, deleting
+#     id: int
+#     completed: bool
+#     created_on: datetime
+
+#     class Config:
+#         orm_mode = True
