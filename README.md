@@ -3,7 +3,7 @@
 ### Client
 `cd client` to move into the client directory.\
 Run `npm install` to install neccessary packages for our client.\
-Run `npm start` to run the react app in your browser.\
+Run `npm start` to run the react app in your browser.
 
 ### Server
 `cd server` to move into the server directory.\
