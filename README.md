@@ -1,18 +1,18 @@
 ## Installation
 
 ### Client
-`cd client` to move into the client directory.
-Run `npm install` to install neccessary packages for our client.
-Run `npm start` to run the react app in your browser.
+`cd client` to move into the client directory.\
+Run `npm install` to install neccessary packages for our client.\
+Run `npm start` to run the react app in your browser.\
 
 ### Server
-`cd server` to move into the server directory.
-Create a virtual environment with `python3 -m venv venv`.
-While in the server directory, run the virtual environment with `./venv/Scripts/activate` in cmd.
-If you are using powershell, run the virtual environment with `./venv/Scripts/activate.ps1` instead.
-Install dependencies by running `pip install -r requirements.txt`.
-Run `uvicorn main:app --reload` to run the server.
-You can deactivate your virtual environment by running `deactivate`.
+`cd server` to move into the server directory.\
+Create a virtual environment with `python3 -m venv venv`.\
+While in the server directory, run the virtual environment with `./venv/Scripts/activate` in cmd.\
+If you are using powershell, run the virtual environment with `./venv/Scripts/activate.ps1` instead.\
+Install dependencies by running `pip install -r requirements.txt`.\
+Run `uvicorn main:app --reload` to run the server.\
+You can deactivate your virtual environment by running `deactivate`.\
 
 ## Available Client Scripts 
 
@@ -40,6 +40,3 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-## Available Server Scripts 
-...
