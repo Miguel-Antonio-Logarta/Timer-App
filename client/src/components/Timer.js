@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setPlaySound, tick } from "../redux/timerSlice";
+import { tickActiveTimeLeft } from "../redux/todoSlice";
 
 function Timer ({ sound }) {
     /*
@@ -20,6 +21,7 @@ function Timer ({ sound }) {
         const interval = setInterval(() => {
           if (!paused) {
             dispatch(tick());
+            dispatch(tickActiveTimeLeft());
           }
         }, 1000);
         return () => clearInterval(interval);

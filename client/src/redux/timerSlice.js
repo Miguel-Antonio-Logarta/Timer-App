@@ -4,7 +4,8 @@ export const timerSlice = createSlice({
     name: "timer",
     initialState: {
         paused: true,
-        currentTime: 10*1000,
+        // currentTime: 3*60*60*1000,
+        currentTime: 25*60*1000,
         pomodoro: 25*60*1000,
         longBreak: 15*60*1000,
         shortBreak: 5*60*1000,
@@ -19,23 +20,41 @@ export const timerSlice = createSlice({
             // Subtracts 1000 milliseconds (1 second) from the current time.
             state.currentTime -= 1000;
 
-            // When the timer reaches 0. Set value of timer
-            if (state.currentTime <= 0) {
-                state.playSound = true;
-                state.paused = true;
-                if (state.currentInterval === state.longBreakInterval && !state.break) {
-                    state.currentTime = state.longBreak;
-                    state.currentInterval = 0;
-                    state.break = true;
-                } else if (!state.break) {
-                    state.currentTime = state.shortBreak;
-                    state.break = true;
-                } else {
-                    state.currentTime = state.pomodoro;
-                    state.currentInterval += 1;
-                    state.break = false;
-                }
+            if (state.currentTime > 0) {
+                return;
             }
+
+            state.playSound = true;
+            state.paused = true;
+            if (state.currentInterval === state.longBreakInterval && !state.break) {
+                state.currentTime = state.longBreak;
+                state.currentInterval = 0;
+                state.break = true;
+            } else if (!state.break) {
+                state.currentTime = state.shortBreak;
+                state.break = true;
+            } else {
+                state.currentTime = state.pomodoro;
+                state.currentInterval += 1;
+                state.break = false;
+            }
+            // When the timer reaches 0. Set value of timer
+            // if (state.currentTime <= 0) {
+            //     state.playSound = true;
+            //     state.paused = true;
+            //     if (state.currentInterval === state.longBreakInterval && !state.break) {
+            //         state.currentTime = state.longBreak;
+            //         state.currentInterval = 0;
+            //         state.break = true;
+            //     } else if (!state.break) {
+            //         state.currentTime = state.shortBreak;
+            //         state.break = true;
+            //     } else {
+            //         state.currentTime = state.pomodoro;
+            //         state.currentInterval += 1;
+            //         state.break = false;
+            //     }
+            // }
         },
         switchTimer(state, action) {
             state.paused = !state.paused;

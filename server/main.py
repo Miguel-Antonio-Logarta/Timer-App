@@ -1,9 +1,8 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
 import models
 from database import engine
-from routers import todos
+from routers import todos, users
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -23,13 +22,4 @@ app.add_middleware(
 )
 
 app.include_router(todos.router)
-
-
-# @app.get("/db_test/{id}")
-# async def getDBTodo(id: int, db: Session = Depends(get_db)):
-#     return db.query(models.Todo).filter(models.Todo.id == id).first()
-
-
-@app.get("/")
-async def root():
-    return """Hello, welcome to the timer API."""
+app.include_router(users.router)

@@ -316,16 +316,18 @@ header {
 .upper-portion {
   display: inline-flex;
   flex-wrap: nowrap;
+  font-size: 20px;
 }
 
-.upper-portion h3{
+/* .upper-portion h3{
   font-size: 16px;
-}
+} */
 
 .right-portion {
   display: flex;
   padding-left: 50px;
   border-left: 1px solid white;
+  align-items: center;
 }
 
 .right-portion button{
@@ -754,3 +756,21 @@ header {
   align-items: center;
   justify-content: center;
 }
+
+.todo_completed {
+  opacity: 0.7;
+  transition: opacity var(--transitionTime);
+}
+
+.todo_completed p, .todo_completed h3 {
+  text-decoration: line-through;
+}
+.todo_completed:hover {
+  opacity: 1;
+  transition: opacity var(--transitionTime);
+}
+
+.sign-up:hover {
+  text-decoration: underline;
+  cursor: pointer;
+} 

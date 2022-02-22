@@ -31,6 +31,7 @@ server/__pycache__
 server/venv
 server/routers/__pycache__
 server/config.py
+server/oauth2.py
 
 # Others
 notes.txt

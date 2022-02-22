@@ -23,7 +23,7 @@ function TimerController() {
                 </div>
                 <div className="timer-control">
                     <button className="timer-pause-play timer-button" onClick={() => dispatch(switchTimer())}>{paused ? "Play" : "Pause"}</button>
-                    <button className="timer-skip timer-button" onClick={() => dispatch(skipTimer())}>Skip</button>
+                    <button className={`timer-skip timer-button ${paused && "hidden"}`} onClick={() => dispatch(skipTimer())}>Skip</button>
                 </div>
             </div>
     );

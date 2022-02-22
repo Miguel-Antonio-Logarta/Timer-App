@@ -8,7 +8,7 @@ import { Provider } from "react-redux";
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <App key="main-app" />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

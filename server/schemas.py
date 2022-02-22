@@ -1,14 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from datetime import datetime, date
 from typing import Optional
-
-# class TodoItem(BaseModel):
-#     id: Optional[int]
-#     title: str
-#     description: Optional[str] = ""
-#     time_left: Optional[int] = 0
-#     due_date: Optional[str] = None
-#     completed: Optional[bool] = False
 
 
 class TodoBase(BaseModel):
@@ -26,16 +18,39 @@ class TodoCreate(TodoBase):
 class Todo(TodoBase):
     id: int
     completed: bool
-    created_on: datetime    
-    
+    created_on: datetime
+    owner_id: int
+
     class Config:
         orm_mode = True
 
-# class Todo(TodoBase):
-#     # Type checking when reading, updating, deleting
-#     id: int
-#     completed: bool
-#     created_on: datetime
 
-#     class Config:
-#         orm_mode = True
+class CreateUser(BaseModel):
+    username: str
+    email: Optional[EmailStr] = None
+    password: str
+
+
+class UserOut(BaseModel):
+    id: int
+    username: str
+    email: Optional[EmailStr] = None
+    created_on = datetime
+
+    class Config:
+        orm_mode = True
+
+
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    id: Optional[int] = None
+    username: Optional[str] = None

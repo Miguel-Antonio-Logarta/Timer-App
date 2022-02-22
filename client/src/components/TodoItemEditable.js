@@ -1,11 +1,11 @@
-import moment from "moment";
 import React, { useState, useEffect } from "react";
 import { MdDelete, MdEditCalendar } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { discardChanges, createTodoAsync, updateTodoAsync } from "../redux/todoSlice";
-import { convertToHMS, convertToMilliseconds } from "../other/utilities";
+import { convertToHMS } from "../other/utilities";
+import { validateEditableData } from "../other/validation";
 
-function TodoItemEditable(props) {
+function TodoItemEditable({todoData}) {
 
     // Props data is yyyy-mm-dd, props timeLeft is an int representing milliseconds
     // Setting dueDate to null creates an issue somewhere.
@@ -13,16 +13,14 @@ function TodoItemEditable(props) {
     // id, title, description, dueDate, timeLeft in data
     // newTodo, active, createdOn, completed are not altered in any way.
     const [data, setData] = useState({
-        id: props.id ? props.id : null,
-        title: props.title ? props.title : null,
-        description: props.description ? props.description : null,
-        dueDate: props.dueDate ? props.dueDate : null,
-        newTodo: props.newTodo ? props.newTodo : false,
-        active: props.active ? props.active : false,
-        timeLeft: props.timeLeft ? props.timeLeft : null,
-        createdOn: props.createdOn ? props.createdOn : null,
-        completed: props.completed ? props.completed : false,
-        ...convertToHMS(props.timeLeft ? props.timeLeft: 0)      // Calculates values for keys "hrs", "mins", "secs" 
+        id: todoData.id ? todoData.id : null,
+        title: todoData.title ? todoData.title : null,
+        description: todoData.description ? todoData.description : null,
+        dueDate: todoData.dueDate ? todoData.dueDate : null,
+        timeLeft: todoData.timeLeft ? todoData.timeLeft : null,
+        createdOn: todoData.createdOn ? todoData.createdOn : null,
+        completed: todoData.completed ? todoData.completed : false,
+        ...convertToHMS(todoData.timeLeft ? todoData.timeLeft: 0)      // Calculates values for keys "hrs", "mins", "secs" 
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -38,62 +36,22 @@ function TodoItemEditable(props) {
         })
     }
 
-    function validateData(data) {
-        let errors = {};
-
-        if (data.title == null || data.title.trim().length === 0) {
-            errors.title = "Please enter a todo";
-        } else if (data.title.trim().length > 150) {
-            errors.title = "Character limit reached. Please limit your description to 150 characters";
-        }
-
-        // Check description character limit
-        if (data.description != null && data.description.length > 1500) {
-            errors.description = "Character limit reached. Please limit your description to 1500 characters";
-        }
-
-        const onlyNums = /^[0-9]*$/; // Parse input including empty fields
-        if (onlyNums.test(data.hrs) && onlyNums.test(data.mins) && onlyNums.test(data.secs)) {
-            if (Number(data.hrs) < 0 ||
-                Number(data.mins) < 0 ||
-                Number(data.secs) < 0 ||
-                Number(data.mins) > 59 ||
-                Number(data.secs) > 59) {
-                errors.time = "Please enter a valid time that is in range";
-            } else {
-                data.timeLeft = convertToMilliseconds({hrs: data.hrs, mins: data.mins, secs: data.secs});
-            }
-        } else {
-            errors.time = "Please only enter numbers";
-        }
-
-        // Check date validity
-        if (data.dueDate != null && data.dueDate.length !== 0) {
-            if (!moment(data.dueDate, "YYYY-MM-DD", true).isValid()) {
-                errors.dueDate="Please enter a valid date";
-            }
-        }
-
-        return errors;
-        
-    }
-
     const handleSubmit = e => {
-        // We have to set errors before set submitting. Otherwsie, useEffect triggers
-        // And finds that Object.keys(errors).length is 0 (We have not checked for errors yet)
-        // And then submits the data. We then get the wrong values passed to the API 
         e.preventDefault();               
-        setErrors(validateData(data));     
+        setErrors(validateEditableData(data));     
         setIsSubmitting(true);
     }
 
     useEffect(() => {
         if (Object.keys(errors).length === 0 && isSubmitting) {
-            if (data.newTodo) {
-                dispatch(createTodoAsync(data));
+            // Instead of having newTodo, just check if id is null or not
+            // Null means that this is a new todo. An existing id means that we are updating an existing todo.
+            if (data.id) {
+                const { hrs, mins, secs, ...submissionData } = data;
+                dispatch(updateTodoAsync(submissionData));
             }
             else {
-                dispatch(updateTodoAsync(data));
+                dispatch(createTodoAsync(data));
             }
             setIsSubmitting(false);
         }
@@ -101,7 +59,7 @@ function TodoItemEditable(props) {
 
     return(
         <div className="todo-edit">
-                <h3 className="todo-edit-title">{data.newTodo ? "Make a new todo" : "Update the todo"}</h3>
+                <h3 className="todo-edit-title">{data.id === null ? "Make a new todo" : "Update the todo"}</h3>
                 <form onSubmit={handleSubmit}>
                     <label className="form-label" htmlFor="task-title">Todo:</label>
                     <div className="task-title-input">
@@ -174,7 +132,7 @@ function TodoItemEditable(props) {
                     <div className="form-buttons">
                         <button type="submit" className="round-button"><MdEditCalendar size="24px"/><span>Save</span></button>
                         <button type="button" onClick={() => dispatch(discardChanges(data))} className="round-button" name="Delete">
-                            <MdDelete size="24px"/><span>{data.newTodo ? "Delete" : "Discard Changes"}</span>
+                            <MdDelete size="24px"/><span>{data.id === null ? "Delete" : "Discard Changes"}</span>
                         </button>
                     </div>
                 </form>

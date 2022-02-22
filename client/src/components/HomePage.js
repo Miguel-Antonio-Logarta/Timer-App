@@ -1,24 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import TimerController from "./TimerController";
-
+import TodoSmall from "./TodoSmall";
+import { syncActiveTodoToDBAsync } from "../redux/todoSlice";
 function HomePage() {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        // When todolist unmounts, dispatch an action that syncs the active todo 
+        // To the server. Do not pass active Todo into the dispatch.
+        console.log("Mounting Home");
+        return () => {
+            console.log("Dispatching action to DB");
+            dispatch(syncActiveTodoToDBAsync());
+            console.log("Unmounting Home");
+        }
+        // return () => console.log("Unmounted");
+    }, [dispatch]);
+
     return(
         <div className="home-wrapper">
             <TimerController />
-            <div className="remaining-todos">
-                <div className="left-portion">
-                    <div className="upper-portion">
-                        <h3>Your Current Task: Finish this component</h3>
-                        <span>Time Left to completion: <b>1:04:55</b></span>
-                    </div>
-                    <div className="lower-portion">
-                        <p>Finish making this component under the timer.</p>
-                    </div>
-                </div>
-                <div className="right-portion">
-                    <button className="check-button">Complete</button>
-                </div>
-            </div>
+            <TodoSmall />
         </div>
     );
 }
