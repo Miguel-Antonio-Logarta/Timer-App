@@ -3,7 +3,7 @@
 ### Client
 `cd client` to move into the client directory.\
 Run `npm install` to install neccessary packages for our client.\
-Run `npm start` to run the react app in your browser.\
+Run `npm start` to run the react app in your browser.
 
 ### Server
 `cd server` to move into the server directory.\
@@ -12,7 +12,7 @@ While in the server directory, run the virtual environment with `./venv/Scripts/
 If you are using powershell, run the virtual environment with `./venv/Scripts/activate.ps1` instead.\
 Install dependencies by running `pip install -r requirements.txt`.\
 Run `uvicorn main:app --reload` to run the server.\
-You can deactivate your virtual environment by running `deactivate`.\
+You can deactivate your virtual environment by running `deactivate`.
 
 ## Available Client Scripts 
 
