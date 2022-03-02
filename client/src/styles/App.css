@@ -774,3 +774,23 @@ header {
   text-decoration: underline;
   cursor: pointer;
 } 
+
+.user-info {
+  margin: 25px 0 0 0 ;
+  padding: 25px;
+  backdrop-filter: var(--glassEffect);
+  border-radius: 10px;
+  display: flex;
+  justify-content: stretch;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-info button {
+  margin: 25px 0 0 0;
+  padding: 16px 15px;
+  border-radius: 5px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}

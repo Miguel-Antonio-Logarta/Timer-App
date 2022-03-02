@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { validateSignUpForm } from '../other/validation';
+import { createUser } from '../redux/userSlice';
 
 function SignUp() {
+    // TODO: Add error handling iif the username or email already exists.
     const dispatch = useDispatch();
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -14,7 +16,6 @@ function SignUp() {
 
     const handleSubmit = e => {
         e.preventDefault();
-        // console.log(data);
         setErrors(validateSignUpForm(data));
         setIsSubmitting(true);
     }
@@ -29,9 +30,11 @@ function SignUp() {
 
     useEffect(() => {
         if (isSubmitting && Object.keys(errors).length === 0) {
-            // dispatch();
+            // Clean up data to submit.
+            const { retypePassword, ...toSubmit } = data;
+            dispatch(createUser(toSubmit));
         }
-    }, [dispatch, isSubmitting, errors]);
+    }, [dispatch, isSubmitting, errors, data]);
 
     return (
         <form className="signup" onSubmit={handleSubmit}>

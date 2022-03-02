@@ -38,23 +38,6 @@ export const timerSlice = createSlice({
                 state.currentInterval += 1;
                 state.break = false;
             }
-            // When the timer reaches 0. Set value of timer
-            // if (state.currentTime <= 0) {
-            //     state.playSound = true;
-            //     state.paused = true;
-            //     if (state.currentInterval === state.longBreakInterval && !state.break) {
-            //         state.currentTime = state.longBreak;
-            //         state.currentInterval = 0;
-            //         state.break = true;
-            //     } else if (!state.break) {
-            //         state.currentTime = state.shortBreak;
-            //         state.break = true;
-            //     } else {
-            //         state.currentTime = state.pomodoro;
-            //         state.currentInterval += 1;
-            //         state.break = false;
-            //     }
-            // }
         },
         switchTimer(state, action) {
             state.paused = !state.paused;

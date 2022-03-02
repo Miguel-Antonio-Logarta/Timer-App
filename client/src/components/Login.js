@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { validateLoginForm } from '../other/validation';
+import { login } from '../redux/userSlice';
 
-function Login(props, { setToken }) {
+function Login() {
     const dispatch = useDispatch();
 
     const [data, setData] = useState({
         username: "",
         password: "",
     });
-    // console.log(data);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
 
     const handleSubmit = e => {
         e.preventDefault();
-        console.log(data);
         setErrors(validateLoginForm(data));
         setIsSubmitting(true);
     }
@@ -30,10 +29,10 @@ function Login(props, { setToken }) {
     
     useEffect(() => {
         if (isSubmitting && Object.keys(errors).length === 0) {
-            // dispatch();
-            console.log("Submitting login");
+            dispatch(login(data));
+            setIsSubmitting(false);
         }
-    }, [dispatch, isSubmitting, errors]);
+    }, [dispatch, isSubmitting, errors, data]);
 
     return (
             <form className="signup" onSubmit={handleSubmit}>

@@ -35,7 +35,7 @@ class UserOut(BaseModel):
     id: int
     username: str
     email: Optional[EmailStr] = None
-    created_on = datetime
+    created_on: datetime
 
     class Config:
         orm_mode = True

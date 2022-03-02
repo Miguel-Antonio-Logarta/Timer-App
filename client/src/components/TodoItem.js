@@ -1,23 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MdAddTask, MdDelete, MdDone, MdEdit } from "react-icons/md";
-import { editTodo, setActive, deleteTodoAsync, completeTodoAsync, updateTodoAsync, setActiveTimeLeft, setActiveAsync } from "../redux/todoSlice";
+import { editTodo, setActive, deleteTodoAsync, completeTodoAsync, setActiveAsync } from "../redux/todoSlice";
 import { convertToHMSString } from "../other/utilities";
 import TodoItemEditable from "./TodoItemEditable";
 
-function TodoItem({timeLeft, todoData}) {
-    // When time is being subtracted, the database can track when you started and stopped the timer.
-    //
+function TodoItem({todoData}) {
     const dispatch = useDispatch();
     const { activeTodo, editableId } = useSelector((state) => state.todos);
-    // const { paused, currentTime } = useSelector((state) => state.timer);
-    // const [time, setTime] = useState(todoData.timeLeft);
-    let timeDisplay = convertToHMSString(todoData.timeLeft);
     const isActive = todoData.id === activeTodo.id;
-
-    // if (isActive) {
-    //     timeDisplay = convertToHMSString(timeLeft);
-    // }
+    let timeDisplay = convertToHMSString(todoData.timeLeft);
 
     const handleActiveClick = () => {
         if (Object.keys(activeTodo).length !== 0) {
@@ -27,38 +19,6 @@ function TodoItem({timeLeft, todoData}) {
         }
     }
 
-    // useEffect(() => {
-    //     console.log("todo moutn");
-    //     return () => console.log("todo unmount");
-    // }, []);
-    // Listens to the timer. When the timer is running, the active todo will subtract time from its todo
-    // useEffect(() => {
-    //     if (!paused && isActive) {
-    //         setTime((time) => {
-    //             if (time > 0) {
-    //                 return time - 1000;
-    //             } else {
-    //                 return 0;
-    //             }
-    //         });
-    //     }
-    // }, [paused, isActive, currentTime])
-
-    // // Makes a call to the database whenever there is an update
-    // useEffect(() => {
-    //     if (fetchTodo && isActive) {
-    //         console.log("Saving active time");
-    //         dispatch(setActiveTimeLeft(time));
-    //         dispatch(updateTodoAsync({timeLeft: time, ...todoData}));
-    //     }
-
-    //     // This return dispatches so many actions. It is not good
-    //     // return () => {
-    //     //     if (todoData.timeLeft !== time) {
-    //     //         dispatch(updateTodoAsync({timeLeft: time, ...todoData}));
-    //     //     }
-    //     // }
-    // }, [dispatch, fetchTodo, time, todoData, isActive])
     if (editableId.includes(todoData.id)) {
         return (
             <TodoItemEditable key={todoData.id} todoData={todoData} />

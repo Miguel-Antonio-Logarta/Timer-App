@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { useSelector } from 'react-redux';
 import "./styles/App.css"
 import Navbar from "./components/Navbar";
@@ -12,11 +12,6 @@ import Timer from "./components/Timer";
 
 function App() {
     const visibility = useSelector((state) => state.navbar);
-
-    // useEffect(() => {
-    //   console.log("app moutn");
-    //   return () => console.log("app unmount");
-    // }, [])
 
     return(
       <div className="the-app">

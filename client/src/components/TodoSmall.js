@@ -5,8 +5,6 @@ import { convertToHMSString } from '../other/utilities';
 
 function TodoSmall() {
     const { activeTodo } = useSelector((state) => state.todos);
-    // const todo = todos[0];
-    // const todo = useSelector((state) => state.todos)
     const timeDisplay = convertToHMSString(activeTodo.timeLeft);
     
     if (Object.keys(activeTodo).length === 0) {

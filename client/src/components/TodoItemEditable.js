@@ -8,10 +8,6 @@ import { validateEditableData } from "../other/validation";
 function TodoItemEditable({todoData}) {
 
     // Props data is yyyy-mm-dd, props timeLeft is an int representing milliseconds
-    // Setting dueDate to null creates an issue somewhere.
-    // Separate data state that we submit and data state that is not related
-    // id, title, description, dueDate, timeLeft in data
-    // newTodo, active, createdOn, completed are not altered in any way.
     const [data, setData] = useState({
         id: todoData.id ? todoData.id : null,
         title: todoData.title ? todoData.title : null,
@@ -44,8 +40,6 @@ function TodoItemEditable({todoData}) {
 
     useEffect(() => {
         if (Object.keys(errors).length === 0 && isSubmitting) {
-            // Instead of having newTodo, just check if id is null or not
-            // Null means that this is a new todo. An existing id means that we are updating an existing todo.
             if (data.id) {
                 const { hrs, mins, secs, ...submissionData } = data;
                 dispatch(updateTodoAsync(submissionData));

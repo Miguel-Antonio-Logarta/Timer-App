@@ -10,14 +10,12 @@ router = APIRouter(tags=['todos'])
 
 @router.get("/todos")
 async def get_todos(db: Session = Depends(database.get_db), current_user: int = Depends(auth.get_current_user)):
-    print("Accessing todos")
     # SELECT * FROM todo ORDER BY completed ASC, created_on DESC;
     return db.query(models.Todo).filter(models.Todo.owner_id == current_user.id).order_by(models.Todo.completed.asc(), models.Todo.created_on.desc()).all()
 
 
 @router.get("/todos/{id}", response_model=schemas.Todo)
 async def get_todo_by_id(id: int, db: Session = Depends(database.get_db), current_user: int = Depends(auth.get_current_user)):
-    print("Accessing todos with id ")
     todo_item = db.query(models.Todo).filter(models.Todo.id == id).first()
 
     if todo_item is None:

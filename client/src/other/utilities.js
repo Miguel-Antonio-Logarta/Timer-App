@@ -1,4 +1,7 @@
 import { camelCase, snakeCase } from 'lodash';
+import Cookies from "universal-cookie"
+import jwt_decode from "jwt-decode"
+
 
 export function convertToHMS(milliseconds) { 
     const hrs = Math.floor(milliseconds/3600000);                       // 3600000ms in an hour
@@ -53,4 +56,26 @@ export const snakeCaseKeys = (obj) => {
     return obj;
 };
 
+// Adds access token authorization in the header for fetch requests
+export const authHeader = () => {
+    const cookies = new Cookies();
+    const user = cookies.get('user');
+    if (user && user.accessToken) {
+        return {
+            Authorization: "Bearer " + user.accessToken,
+        }
+    } else {
+        return {};
+    }
+}
+
+// Decodes the JWT access token
+export const getCurrentUser = () => {
+    const cookies = new Cookies();
+    const user = cookies.get('user');
+    if (!user || !user.accessToken) {
+        return false;
+    }
+    return jwt_decode(user.accessToken);
+}
 

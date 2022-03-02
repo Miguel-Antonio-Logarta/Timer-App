@@ -8,14 +8,9 @@ function HomePage() {
 
     useEffect(() => {
         // When todolist unmounts, dispatch an action that syncs the active todo 
-        // To the server. Do not pass active Todo into the dispatch.
-        console.log("Mounting Home");
         return () => {
-            console.log("Dispatching action to DB");
             dispatch(syncActiveTodoToDBAsync());
-            console.log("Unmounting Home");
         }
-        // return () => console.log("Unmounted");
     }, [dispatch]);
 
     return(
