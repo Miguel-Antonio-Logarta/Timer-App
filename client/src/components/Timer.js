@@ -13,6 +13,7 @@ function Timer ({ sound }) {
     */
 
     const dispatch = useDispatch();
+    const { currentTime } = useSelector((state) => state.timer);
     const [alarm] = useState(new Audio(sound));
     const { playSound, paused } = useSelector((state) => state.timer);
     
@@ -25,7 +26,7 @@ function Timer ({ sound }) {
           }
         }, 1000);
         return () => clearInterval(interval);
-      }, [dispatch, paused]);
+      }, [dispatch, paused, currentTime]);
     
     // When the timer reaches zero, the alarm will play
     useEffect(() => {

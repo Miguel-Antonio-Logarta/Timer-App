@@ -2,9 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { camelCaseKeys, snakeCaseKeys } from "../other/utilities";
 import Cookies from "universal-cookie";
 import { authHeader } from "../other/utilities";
+import config from "../other/config";
 
 export const createUser = createAsyncThunk('user/createUser', async (data) => {
-    const response = await fetch(`http://127.0.0.1:8000/user/signup`, {
+    const response = await fetch(`${config.APIURL}/user/signup`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -15,7 +16,6 @@ export const createUser = createAsyncThunk('user/createUser', async (data) => {
         const responseData = await response.json();
         return camelCaseKeys(responseData);
     }
-    return;
 });
 
 export const login = createAsyncThunk('user/login', async (data) => {
@@ -23,7 +23,7 @@ export const login = createAsyncThunk('user/login', async (data) => {
     loginCredentials.append("username", data.username);
     loginCredentials.append("password", data.password);
 
-    const response = await fetch(`http://127.0.0.1:8000/user/login`, {
+    const response = await fetch(`${config.APIURL}/user/login`, {
         // We should not set the content type because it breaks the browser's ability to 
         // Delimit fields in the request body
         method: "POST",
@@ -43,7 +43,7 @@ export const login = createAsyncThunk('user/login', async (data) => {
 });
 
 export const getUserMe = createAsyncThunk('user/getUserMe', async (_, {rejectwithValue}) => {
-    const response = await fetch("http://127.0.0.1:8000/user/me", {
+    const response = await fetch(`${config.APIURL}/user/me`, {
         method: "GET",
         headers: {
             ...authHeader()
@@ -53,7 +53,7 @@ export const getUserMe = createAsyncThunk('user/getUserMe', async (_, {rejectwit
         const data = await response.json();
         return camelCaseKeys(data);
     } else {
-        rejectwithValue('Cannot fetch user');
+        return rejectwithValue('Cannot fetch user');
     }
 });
 
@@ -65,6 +65,8 @@ export const userSlice = createSlice({
     },
     reducers: {
         logout(state, action) {
+            const cookies = new Cookies();
+            cookies.remove('user');
             state.loggedIn = false;
             state.user = null;
         },

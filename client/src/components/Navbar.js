@@ -1,8 +1,8 @@
 import React from "react";
-import { MdTimer, MdAccountCircle, MdSettings, MdEventNote } from "react-icons/md";
+import { MdTimer, MdAccountCircle, MdEventNote } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import NavItems from "./NavItems";
-import { SHOW_HOME, SHOW_TODOS, SHOW_SETTINGS, SHOW_USER  } from "../other/constants";
+import { SHOW_HOME, SHOW_TODOS, SHOW_USER  } from "../other/constants";
 import { showComponent } from "../redux/navbarSlice";
 
 function Navbar(props) {

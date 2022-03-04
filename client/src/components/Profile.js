@@ -1,22 +1,19 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserMe, logout } from '../redux/userSlice';
-import Cookies from "universal-cookie"
 
 function Profile() {
     const { user } = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
+    const handleLogout = (e) => {
+        e.preventDefault();
+        dispatch(logout())
+    }
+
     useEffect(() => {
         dispatch(getUserMe())
     }, [dispatch])
-
-    const handleLogout = (e) => {
-        e.preventDefault();
-        const cookies = new Cookies();
-        cookies.remove('user');
-        dispatch(logout())
-    }
 
     if (user) {
         return (

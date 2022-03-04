@@ -78,4 +78,3 @@ export const getCurrentUser = () => {
     }
     return jwt_decode(user.accessToken);
 }
-

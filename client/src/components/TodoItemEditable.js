@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { MdDelete, MdEditCalendar } from "react-icons/md";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { discardChanges, createTodoAsync, updateTodoAsync } from "../redux/todoSlice";
 import { convertToHMS } from "../other/utilities";
 import { validateEditableData } from "../other/validation";
 
 function TodoItemEditable({todoData}) {
+    const { loggedIn } = useSelector((state) => state.user);
 
     // Props data is yyyy-mm-dd, props timeLeft is an int representing milliseconds
     const [data, setData] = useState({
@@ -124,7 +125,7 @@ function TodoItemEditable({todoData}) {
                     </div>
                     
                     <div className="form-buttons">
-                        <button type="submit" className="round-button"><MdEditCalendar size="24px"/><span>Save</span></button>
+                        <button type="submit" className={`round-button ${!loggedIn && "button-disabled"}`} disabled={!loggedIn}><MdEditCalendar size="24px"/><span>Save</span></button>
                         <button type="button" onClick={() => dispatch(discardChanges(data))} className="round-button" name="Delete">
                             <MdDelete size="24px"/><span>{data.id === null ? "Delete" : "Discard Changes"}</span>
                         </button>

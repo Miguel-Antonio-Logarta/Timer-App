@@ -26,7 +26,7 @@ function TodoItem({todoData}) {
     } else {
         return (
             <div className={`todo_item ${isActive ? "todo_active" : ""} ${todoData.completed ? "todo_completed" : ""}`}>
-                <h3   className="todo_title">{todoData.title}<br /> {`Id: ${todoData.id}, created: ${todoData.createdOn}`}</h3>
+                <h3   className="todo_title">{todoData.title}{/*<br /> {`Id: ${todoData.id}, created: ${todoData.createdOn}`}*/}</h3>
                 <span className="todo_time">{timeDisplay}</span>
                 <p className="todo_due_date">{todoData.dueDate ? `Due: ${todoData.dueDate}` : ''}</p>
                 <p    className={todoData.description ? "todo_description" : "hidden"}>{todoData.description}</p>

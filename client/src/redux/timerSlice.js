@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { convertToHMSString } from "../other/utilities";
+import { POMODORO, SHORT_BREAK, LONG_BREAK } from "../other/constants";
 
 export const timerSlice = createSlice({
     name: "timer",
@@ -11,14 +13,16 @@ export const timerSlice = createSlice({
         shortBreak: 5*60*1000,
         longBreakInterval: 3,
         currentInterval: 0,
-        break: false,
+        breakTime: false,
         skipped: false,
         playSound: false,
+        currentIntervalName: POMODORO
     },
     reducers: {
         tick(state, action) {
             // Subtracts 1000 milliseconds (1 second) from the current time.
             state.currentTime -= 1000;
+            document.title = `${convertToHMSString(state.currentTime)} - Timers`;
 
             if (state.currentTime > 0) {
                 return;
@@ -26,17 +30,22 @@ export const timerSlice = createSlice({
 
             state.playSound = true;
             state.paused = true;
-            if (state.currentInterval === state.longBreakInterval && !state.break) {
+            document.title = `Ring!!! - Timers`;
+
+            if (state.currentInterval === state.longBreakInterval && !state.breakTime) {
                 state.currentTime = state.longBreak;
                 state.currentInterval = 0;
-                state.break = true;
-            } else if (!state.break) {
+                state.breakTime = true;
+                state.currentIntervalName = LONG_BREAK;
+            } else if (!state.breakTime) {
                 state.currentTime = state.shortBreak;
-                state.break = true;
+                state.breakTime = true;
+                state.currentIntervalName = SHORT_BREAK;
             } else {
                 state.currentTime = state.pomodoro;
                 state.currentInterval += 1;
-                state.break = false;
+                state.breakTime = false;
+                state.currentIntervalName = POMODORO;
             }
         },
         switchTimer(state, action) {
@@ -46,8 +55,12 @@ export const timerSlice = createSlice({
             state.currentTime = 0;
         },
         setTimer(state, action) {
-            state.currentTime = action.payload;
+            state.currentTime = action.payload.time;
+            state.currentIntervalName = action.payload.intervalName;
             state.paused = true;
+            // state.currentTime = action.payload;
+            // // state.currentInterval = 0;
+            // state.paused = true;
         },
         setPlaySound(state, action) {
             state.playSound = action.payload;

@@ -13,12 +13,16 @@
   --transitionTime: 300ms;
 }
 
+button {
+  cursor: pointer;
+}
+
 /* Classes presets */
 .round-button {
   text-align: center;
   border: none;
   background-color: rgba(255,255,255,0.1);
-  border-radius: 10px;
+  border-radius: 5px;
   display: flex;
   align-items: center;
   font-size: 14px;
@@ -295,7 +299,7 @@ header {
   cursor: pointer;
 }
 
-.remaining-todos {
+/* .remaining-todos {
   margin-top: 50px;
   padding: 25px 50px;
   width: 600px;
@@ -305,6 +309,67 @@ header {
   border-radius: 10px;
   align-content: stretch;
   font-size: 14px;
+} */
+.small-todo {
+  margin-top: 50px;
+  padding: 25px 50px;
+  width: 600px;
+  backdrop-filter: var(--glassEffect);;
+  /* display: flex; */
+  flex-direction: row;
+  border-radius: 10px;
+  align-content: stretch;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+
+.small-left {
+  grid-area: 1 / 1 / 2 / 3;
+}
+
+.small-right {
+  grid-area: 1 / 3 / 2 / 4;
+}
+
+.small-right.todo_complete {
+  grid-area: 1 / 3 / 2 / 4;
+}
+
+.small-todo .todo_description {
+  margin: 0;
+}
+
+/* .small-todo .todo_due_date {
+  float: right;
+} */
+
+/* .small-todo h3 {
+  margin-bottom: 5px;
+}
+
+.small-todo p {
+  margin-top: 5px;
+} */
+/* .parent {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  } */
+  
+/* .div1 { grid-area: 1 / 1 / 2 / 3; }
+.div2 { grid-area: 1 / 3 / 2 / 4; } */
+
+.small-todo h3 {
+  font-size: 20px;
+}
+
+.small-todo span, .small-todo p {
+  font-size: 16px;
 }
 
 .left-portion {
@@ -466,7 +531,7 @@ header {
   font-size: 14px;
   color: white;
   background-color: rgba(255,255,255,0.1);
-  border-radius: 10px;
+  border-radius: 5px;
   padding: 10px 20px;
   display: flex;
   align-items: center;
@@ -640,7 +705,7 @@ header {
   height: 75px;
   width: 75px;
   border: none;
-  border-radius: 10px;
+  border-radius: 5px;
   color: white;
   background-color: rgba(255,255,255,0.1);
   transition: color .3s, background-color .3s;
@@ -762,7 +827,7 @@ header {
   transition: opacity var(--transitionTime);
 }
 
-.todo_completed p, .todo_completed h3 {
+.todo_completed p, .todo_completed h3, .todo_completed .todo_time {
   text-decoration: line-through;
 }
 .todo_completed:hover {
@@ -793,4 +858,36 @@ header {
   width: 100%;
   align-items: center;
   justify-content: center;
+}
+
+.timer-button.active-interval {
+  color: black;
+  /* flex-grow: 1;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  padding: 20px; */
+  background-color: rgba(255,255,255,1);
+  /* text-shadow: 1px 1px 20px black;
+  text-align: center;
+  text-decoration: none;
+  transition: color .3s, background-color .3s;
+  border: none; */
+}
+
+.timer-button.active-interval {
+  color: white;
+  background-color: rgba(255,255,255,0.2);
+  transition: color .3s, background-color .3s;
+  /* border: 1px solid white;
+  border-left: none;
+  border-right: none; */
+  border-top: 1px solid white;
+}
+
+.todo-list-login {
+  text-align: center;
+}
+
+.button-disabled {
+  cursor: not-allowed;
 }

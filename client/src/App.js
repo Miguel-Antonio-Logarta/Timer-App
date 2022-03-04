@@ -1,5 +1,5 @@
-import React from "react";
-import { useSelector } from 'react-redux';
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import "./styles/App.css"
 import Navbar from "./components/Navbar";
 import HomePage from "./components/HomePage";
@@ -9,9 +9,16 @@ import { SHOW_HOME, SHOW_TODOS, SHOW_SETTINGS, SHOW_USER } from "./other/constan
 import UserPage from "./components/UserPage";
 import ringSound from "./resources/alarm.mp3";
 import Timer from "./components/Timer";
+import { getUserMe } from "./redux/userSlice";
 
 function App() {
     const visibility = useSelector((state) => state.navbar);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+      document.title = "Timers - A productivity app";
+      dispatch(getUserMe());
+    }, [dispatch]);
 
     return(
       <div className="the-app">
