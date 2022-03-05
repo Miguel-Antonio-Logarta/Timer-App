@@ -6,12 +6,33 @@ import schemas
 import database
 import models
 import auth
+import re
 
 router = APIRouter(tags=['users'])
 
 
 @router.post('/user/signup', response_model=schemas.Token)
 async def create_user(user: schemas.CreateUser, db: Session = Depends(database.get_db)):
+    # RegEx for username and email
+    # Usernames are alphanumeric, but can have hyphens (-) and underscores (_) in them
+    # Usernames need to be between 6 to 30 characters long
+    emailRe = r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+    usernameRe = r"^[A-Za-z0-9_-]{5,29}$"
+
+    # Check if the email is not empty and valid
+    if (user.email is not None and not re.search(emailRe, user.email)):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="The email is not valid"
+        )
+
+    # Check if the username is valid
+    if (not re.search(usernameRe, user.username)):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="The username is not valid"
+        )
+
     # Check if username or email has already been taken
     user_exists = db.query(models.User).filter(or_(models.User.username == user.username, models.User.email == user.email)).first()
     if user_exists is not None:
