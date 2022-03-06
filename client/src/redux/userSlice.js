@@ -2,10 +2,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { camelCaseKeys, snakeCaseKeys } from "../other/utilities";
 import Cookies from "universal-cookie";
 import { authHeader } from "../other/utilities";
-import config from "../other/config";
 
 export const createUser = createAsyncThunk('user/createUser', async (data) => {
-    const response = await fetch(`${config.APIURL}/user/signup`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/user/signup`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -23,7 +22,7 @@ export const login = createAsyncThunk('user/login', async (data) => {
     loginCredentials.append("username", data.username);
     loginCredentials.append("password", data.password);
 
-    const response = await fetch(`${config.APIURL}/user/login`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/user/login`, {
         // We should not set the content type because it breaks the browser's ability to 
         // Delimit fields in the request body
         method: "POST",
@@ -43,7 +42,7 @@ export const login = createAsyncThunk('user/login', async (data) => {
 });
 
 export const getUserMe = createAsyncThunk('user/getUserMe', async (_, {rejectwithValue}) => {
-    const response = await fetch(`${config.APIURL}/user/me`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/user/me`, {
         method: "GET",
         headers: {
             ...authHeader()

@@ -10,7 +10,7 @@ client/src/__tests__
 
 # Components
 client/src/components/Test*
-client/src/other/config.js
+client/src/other/seedData.js
 client/Tests
 
 # Client Misc

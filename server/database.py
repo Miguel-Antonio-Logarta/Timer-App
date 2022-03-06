@@ -6,7 +6,7 @@ import config
 DB_NAME = 'timerapp'
 DB_ADDRESS = '127.0.0.1'
 
-SQLALCHEMY_DATABASE_URL = f"mysql+mysqldb://{config.DB_USERNAME}:{config.DB_PASSWORD}@{DB_ADDRESS}/{DB_NAME}"
+SQLALCHEMY_DATABASE_URL = f"mysql+mysqldb://{config.settings.db_username}:{config.settings.db_password}@{config.settings.db_hostname}:{config.settings.db_port}/{config.settings.db_name}"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL

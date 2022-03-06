@@ -4,8 +4,8 @@ import { SHOW_HOME, SHOW_TODOS, SHOW_SETTINGS, SHOW_USER  } from "../other/const
 export const navbarSlice = createSlice({
     name: "navbar",
     initialState: {
-        [SHOW_HOME]: false,
-        [SHOW_TODOS]: true,
+        [SHOW_HOME]: true,
+        [SHOW_TODOS]: false,
         [SHOW_SETTINGS]: false,
         [SHOW_USER]: false,
     },
