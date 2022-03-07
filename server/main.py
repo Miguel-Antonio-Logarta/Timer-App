@@ -3,14 +3,14 @@ from fastapi.middleware.cors import CORSMiddleware
 import models
 from database import engine
 from routers import todos, users
+import config
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
 origins = [
-    "http://localhost",
-    "http://localhost:3000",
+    config.settings.cors
 ]
 
 app.add_middleware(
