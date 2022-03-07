@@ -4,7 +4,7 @@ import Cookies from "universal-cookie";
 import { authHeader } from "../other/utilities";
 
 export const createUser = createAsyncThunk('user/createUser', async (data) => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/user/signup`, {
+    const response = await fetch(`https://logarta-timers-server.herokuapp.com/user/signup`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -22,7 +22,7 @@ export const login = createAsyncThunk('user/login', async (data) => {
     loginCredentials.append("username", data.username);
     loginCredentials.append("password", data.password);
 
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/user/login`, {
+    const response = await fetch(`https://logarta-timers-server.herokuapp.com/user/login`, {
         // We should not set the content type because it breaks the browser's ability to 
         // Delimit fields in the request body
         method: "POST",
@@ -42,7 +42,7 @@ export const login = createAsyncThunk('user/login', async (data) => {
 });
 
 export const getUserMe = createAsyncThunk('user/getUserMe', async (_, {rejectwithValue}) => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/user/me`, {
+    const response = await fetch(`https://logarta-timers-server.herokuapp.com/user/me`, {
         method: "GET",
         headers: {
             ...authHeader()

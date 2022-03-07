@@ -5,7 +5,7 @@ import { authHeader } from "../other/utilities";
 // Also add support for anonymous sessions so that the user does not need an account to store their todos and settings
 
 export const fetchTodosAsync = createAsyncThunk('todos/fetchTodos', async () => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/todos`, { 
+    const response = await fetch(`https://logarta-timers-server.herokuapp.com/todos`, { 
         method: "GET",
         headers: {
             ...authHeader()
@@ -21,7 +21,7 @@ export const fetchTodosAsync = createAsyncThunk('todos/fetchTodos', async () => 
 });
 
 export const deleteTodoAsync = createAsyncThunk('todos/deleteTodo', async (id) => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/todos/${id}`, { 
+    const response = await fetch(`https://logarta-timers-server.herokuapp.com/todos/${id}`, { 
         method: "DELETE",
         headers: {
             'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export const deleteTodoAsync = createAsyncThunk('todos/deleteTodo', async (id) =
 });
 
 export const createTodoAsync = createAsyncThunk('todos/createTodo', async (data, { rejectWithValue }) => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/todos`, {
+    const response = await fetch(`https://logarta-timers-server.herokuapp.com/todos`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ export const createTodoAsync = createAsyncThunk('todos/createTodo', async (data,
 })
 
 export const updateTodoAsync = createAsyncThunk('todos/updateTodo', async (data) => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/todos/`, { 
+    const response = await fetch(`https://logarta-timers-server.herokuapp.com/todos/`, { 
         method: "PUT",
         headers: {
             'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ export const updateTodoAsync = createAsyncThunk('todos/updateTodo', async (data)
 });
 
 export const completeTodoAsync = createAsyncThunk('todos/completeTodo', async (id) => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/todos/${id}`, { 
+    const response = await fetch(`https://logarta-timers-server.herokuapp.com/todos/${id}`, { 
         method: "PATCH",
         headers: {
             'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ export const setActiveAsync = createAsyncThunk('todos/setActiveTodo', async (id,
     // When setActiveAsync is called, it will sync the current active todo with the database (save the time),
     // Then after the response is successful, it will switch the current active todo with a new active todo
     const state = getState();
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/todos/`, { 
+    const response = await fetch(`https://logarta-timers-server.herokuapp.com/todos/`, { 
         method: "PUT",
         headers: {
             'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ export const syncActiveTodoToDBAsync = createAsyncThunk('todos/syncActiveTodo', 
         return {"message": "Cannot send empty active todo to database"};
     }
 
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/todos/`, { 
+    const response = await fetch(`https://logarta-timers-server.herokuapp.com/todos/`, { 
         method: "PUT",
         headers: {
             'Content-Type': 'application/json',
