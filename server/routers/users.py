@@ -11,34 +11,67 @@ import re
 router = APIRouter(tags=['users'])
 
 
+def validate_new_password(password: str) -> bool:
+    passwordRe = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,128}$"
+    return re.search(passwordRe, password)
+
+
 @router.post('/user/signup', response_model=schemas.Token)
 async def create_user(user: schemas.CreateUser, db: Session = Depends(database.get_db)):
-    # RegEx for username and email
+    # RegEx for username, email, and password
     # Usernames are alphanumeric, but can have hyphens (-) and underscores (_) in them
     # Usernames need to be between 6 to 30 characters long
+    # Passwords must have at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character @$!%*?&
+    # Password length must also be between 6 to 128 characters long
     emailRe = r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
     usernameRe = r"^[A-Za-z0-9_-]{5,29}$"
+    passwordRe = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,128}$"
+
+    errors = []
 
     # Check if the email is not empty and valid
-    if (user.email is not None and not re.search(emailRe, user.email)):
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="The email is not valid"
-        )
+    # TODO: make emails optional
+    if (user.email and not re.search(emailRe, user.email)):
+        errors.append({
+            "loc": ["body", "email"],
+            "msg": "The email is not valid",
+        })
 
     # Check if the username is valid
     if (not re.search(usernameRe, user.username)):
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="The username is not valid"
-        )
+        errors.append({
+            "loc": ["body", "username"],
+            "msg": "The username is not valid",
+        })
+    
+    # Check if password is valid
+    if (not re.search(passwordRe, user.password)):
+        errors.append({
+            "loc": ["body", "email"],
+            "msg": "The password is not valid",
+        })
 
-    # Check if username or email has already been taken
-    user_exists = db.query(models.User).filter(or_(models.User.username == user.username, models.User.email == user.email)).first()
-    if user_exists is not None:
+    
+    # Check if username has already been taken
+    username_exists = db.query(models.User).filter(models.User.username == user.username).first()
+    if username_exists is not None:
+        errors.append({
+            "loc": ["body", "username"],
+            "msg": "The username has already been taken",
+        })
+    
+    # Check if email has already been taken
+    email_exists = db.query(models.User).filter(models.User.email == user.email).first()
+    if email_exists is not None:
+        errors.append({
+            "loc": ["body", "email"],
+            "msg": "The email has already been taken",
+        })
+    
+    if len(errors) > 0:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="The username or email has already been taken"
+            detail=errors
         )
 
     # Hash the password and store in db
@@ -81,4 +114,60 @@ async def read_users_me(db: Session = Depends(database.get_db), current_user: in
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Server could not find a user with username: {current_user.username}"
         )
+    return user
+
+
+@router.patch('/user/me/email', response_model=schemas.UpdateEmail)
+async def change_email(update_email: schemas.UpdateEmail, db: Session = Depends(database.get_db), current_user: int = Depends(auth.get_current_user)):
+    user = db.get(models.User, current_user.id)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Server could not find a user with username: {current_user.username}"
+        )
+
+    # Check if the email is the same as the old one
+    if (user.email == update_email.email):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"The email is the same as the old email"
+        )
+
+    setattr(user, 'email', update_email.email)
+
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return {"email": user.email}
+    
+
+@router.patch('/user/me/password', response_model=schemas.UserOut)
+async def change_password(update_password: schemas.UpdatePassword, db: Session = Depends(database.get_db), current_user: int = Depends(auth.get_current_user)):
+    user = db.get(models.User, current_user.id)
+
+    # Check if the old password is correct
+    if not auth.verify_password(update_password.old_password, user.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"The old password is incorrect"
+        )
+
+    # Check if the new password fulfills the password requirements
+    if not validate_new_password(update_password.new_password):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"The new password is not a valid password"
+        )
+    
+    # Check if the new password is the same as the old password
+    if auth.verify_password(update_password.new_password, user.password):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"The new password cannot be the same as the old password"
+        )
+    
+    new_password = auth.get_hashed_password(update_password.new_password)
+    setattr(user, 'password', new_password)
+    db.add(user)
+    db.commit()
     return user

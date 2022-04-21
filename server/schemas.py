@@ -3,6 +3,14 @@ from datetime import datetime, date
 from typing import Optional
 
 
+class EmailEmptyAllowedStr(EmailStr):
+    @classmethod
+    def validate(cls, value: str) -> str:
+        if value == "":
+            return value
+        return super().validate(value)
+
+
 class TodoBase(BaseModel):
     title: str
     description: Optional[str] = None
@@ -13,6 +21,10 @@ class TodoBase(BaseModel):
 class TodoCreate(TodoBase):
     # Type checking when creating a todo
     pass
+
+
+class TodoSetCompleted(BaseModel):
+    completed: bool
 
 
 class Todo(TodoBase):
@@ -27,14 +39,14 @@ class Todo(TodoBase):
 
 class CreateUser(BaseModel):
     username: str
-    email: Optional[EmailStr] = None
+    email: EmailEmptyAllowedStr
     password: str
 
 
 class UserOut(BaseModel):
     id: int
     username: str
-    email: Optional[EmailStr] = None
+    email: EmailEmptyAllowedStr
     created_on: datetime
 
     class Config:
@@ -54,3 +66,13 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     id: Optional[int] = None
     username: Optional[str] = None
+
+
+class UpdateEmail(BaseModel):
+    email: EmailStr
+
+
+class UpdatePassword(BaseModel):
+    old_password: str
+    new_password: str
+

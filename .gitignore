@@ -36,3 +36,4 @@ server/.env
 
 # Others
 notes.txt
+client/src/other/testData.tsx

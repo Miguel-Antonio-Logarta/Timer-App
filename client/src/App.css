@@ -1,0 +1,756 @@
+/* Font family is Inter with weights 400 and 800 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;800&display=swap');
+:root {
+  --main-bg-color: white;
+  --active-bg-color: #2fa0fd;
+  --main-text-color: black;
+  --dark-text-color: black;
+  --logo-top-color: black;
+  --logo-bottom-color: black; 
+  --active-text-color: #2fa0fd;
+  --box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4); /* horizontal offset, vertical offset, blur radius, color */
+}
+
+* {
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  min-height: 100vh;
+  background-image: url("./other/greenWallpaper.jpg");
+  background-repeat: no-repeat;
+  background-size: cover; /* Resize the background image to cover the entire container */
+  background-position: center; /* Center the image */
+  background-attachment: fixed;
+  /* background: linear-gradient(325deg, rgba(0,124,223,1) 0%, rgba(0,212,255,1) 100%); */
+}
+
+header {
+  z-index: 999;
+}
+
+/* Classes to use for styling */
+.small-radius {
+  border-radius: 4px;
+}
+
+.medium-radius {
+  border-radius: 8px;
+}
+
+.large-radius {
+  border-radius: 16px;
+}
+
+.round {
+  border-radius: 50%;
+}
+
+.danger {
+  color: red;
+  border: 1px solid red !important;
+}
+
+.danger:hover {
+  background-color: red;
+  border: 1px solid red;
+  color: white;
+}
+
+.error-message {
+  font-size: 0.8em;
+  color: #fd2f2f;
+  /* display: none; */
+}
+
+.small-text .error-message {
+  font-size: 1em;
+}
+
+.hidden {
+  display: none;
+}
+
+button {
+  line-height: 1;
+  transition: color 200ms ease-in-out;
+  transition: background 200ms ease-in-out;
+  cursor: pointer;
+}
+
+.blue-button:hover {
+  border: 1px solid var(--active-bg-color);
+  color: white;
+  background-color: var(--active-bg-color);
+  transition: color 200ms ease-in-out;
+  transition: background 200ms ease-in-out;
+  cursor: pointer;
+}
+
+.active-button {
+  background-color: var(--active-bg-color);
+  color: white;
+}
+
+/* Navigation Bar styling */
+header {
+  display: flex;
+  /* flex-direction: row; */
+  /* align-items: stretch; */
+  justify-content: center;
+  color: var(--main-text-color);
+  background-color: var(--main-bg-color);
+  /* padding: 0 25%; */
+  height: 3em;
+  box-shadow: var(--box-shadow);
+  position: fixed;
+  width: 100%;
+  /* top: 0; */
+  /* left: 0; */
+}
+
+header, .inner-header, nav, nav ul, nav ul li {
+  display: flex;
+  align-items: stretch;
+}
+
+
+.inner-header {
+  /* display: flex; */
+  flex-grow: 1;
+  max-width: 800px;
+  justify-content: space-between;
+}
+/* nav {
+  display: flex;
+  align-items: stretch;
+} */
+
+nav ul {
+  list-style-type: none;
+  /* display: flex; */
+  flex-direction: row;
+  /* align-items: stretch; */
+}
+
+/* nav ul li {
+  display: flex;
+  align-items: stretch;
+} */
+
+/* The <a> tag inside the <li> tag*/
+.nav-link {
+  text-decoration: none;
+  /* color: white; */
+}
+
+.logo {
+  font-weight: 800;
+  font-size: 1.2em;
+  /* font-size: 72px; */
+  background: -webkit-linear-gradient(#008eff, #6ae6ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logo, .nav-link, .profile-link {
+  display: flex;
+  align-items: center;
+  padding: 0 1.2em;
+  justify-content: center;
+}
+
+/* Color transitions are not working */
+.nav-link {
+  color: var(--main-text-color);
+  /* transition: color 200ms ease-in-out; */
+  /* transition: background-color 200ms ease-in-out; */
+  transition: all 200ms ease-in-out;
+  text-decoration: none;
+  border-bottom: 3px solid var(--main-bg-color);
+  font-size: 1em;
+}
+
+.nav-link:hover {
+  /* background-color: var(--active-bg-color); */
+  border-bottom: 3px solid var(--active-bg-color);
+  /* background: -webkit-linear-gradient(#008eff, #6ae6ff); */
+  /* background: #6ae6ff; */
+  /* background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%); */
+  color: var(--active-bg-color);
+  /* transition: color 200ms ease-in-out; */
+  /* transition: color 200ms ease-in-out;
+  transition: background-color 200ms ease-in-out; */
+  transition: all 200ms ease-in-out;
+}
+
+/* .burger-icon {
+  display: none;
+} */
+
+/* .nav-drop-down-link {
+  display: none;
+} */
+
+.nav-icon {
+  margin-right: 1em;
+}
+
+/* Timer */
+.timer-page {
+  display: flex;
+  justify-content: center;
+}
+
+.rounded-background {
+  margin: 100px 0 0 0;
+  /* background: var(--main-bg-color); */
+  background: rgb(243, 243, 243);
+  border-radius: 16px;
+  width: 800px;
+  box-shadow: var(--box-shadow);
+}
+
+.timer {
+  /* background-color: rgba(0, 0, 0, 0.1); */
+  background-color: var(--main-bg-color);
+  /* box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.3); */
+  border-radius: 16px;
+  /* width: min(600px, 90vw); */
+  margin: 8px;
+  display: grid;
+  grid-template: 48px 1fr 48px / repeat(6, 1fr);
+  padding: 1.2em 2em;
+  column-gap: 15px;
+}
+
+.timer button {
+  border: 1px solid gray;
+  border-radius: 8px;
+  background: white;
+}
+
+.timer button:hover {
+  border: 1px solid var(--active-bg-color);
+  background: var(--active-bg-color);
+  color: white;
+}
+
+.timer button.active-button {
+  border: 1px solid var(--active-bg-color);
+  background: var(--active-bg-color);
+  color: white;
+}
+/* Pomodoro, short break, long break button length */
+.timer button:nth-child(-n+3) {
+  grid-column: span 2;
+}
+
+/* Pause, play, and skip button length */
+.timer button:nth-child(n+4) {
+  grid-column: span 3;
+}
+
+.timer .pause-play-full {
+  grid-column: span 6 !important;
+}
+
+.timer-display {
+  text-align: center;
+  /* font-size: 10em; */
+  grid-column: 1 / 7;
+  padding: 0.2em 0;
+  font-size: min(10em, 80vw);
+}
+
+/* Todo Items */
+.todo-item {
+  background-color: var(--main-bg-color);
+  border-radius: 8px;
+  /* width: min(600px, 90vw); */
+  /* padding: 25px; */
+  padding: 1.2em 2em;
+  margin: 8px 8px 8px 8px;
+  display: grid;
+  grid-template: 1fr / 15px 1fr auto;
+  column-gap: 15px;
+  cursor: grab;
+  align-items: center;
+}
+
+.todo-complete, .todo-delete, .todo-make-active {
+  background-color: white;
+  border: 1px solid gray;
+  aspect-ratio: 1/1;
+  font-size: 1.2em;
+}
+
+/* .todo-complete:hover, .todo-delete:hover, .todo-make-active:hover {
+  background-color
+} */
+
+.todo-button-area {
+  display: grid;
+  grid-template-areas: 
+    "complete make-active"
+    "complete delete";
+  align-items: center;
+  /* grid-template: 1fr 1fr / 1fr 1fr; */
+  column-gap: 0.8em;
+  row-gap: 0.8em;
+}
+
+.todo-complete {
+  height: 72px;
+  /* height: 100%;
+  width: 100%; */
+  grid-area: complete;
+}
+
+.todo-delete {
+  grid-area: delete;
+  align-self: start;
+}
+
+.todo-make-active {
+  grid-area: make-active;
+  align-self: end;
+}
+
+.todo-delete, .todo-make-active {
+  height: 30px;
+  font-size: 0.8em;
+}
+
+.todo-progress {
+  width: 15px;
+  background: rgb(243, 243, 243);
+  /* background: green; */
+  display: flex;
+  align-items: flex-end;
+  align-self: stretch;
+}
+
+.todo-progress-inner {
+  width: 15px;
+  /* height: 15px; */
+  height: 100%;
+  background: rgb(104, 173, 0);
+}
+
+.todo-main-content {
+  transition: padding 300ms ease-in-out;
+  cursor: pointer;
+}
+
+.todo-main-content:hover {
+  background-color: rgb(243, 243, 243);
+  border-radius: 8px;
+  padding: 0.8em;
+  transition: padding 300ms ease-in-out;
+  cursor: pointer;
+}
+
+.todo-main-content span {
+  display: inline-block;
+}
+
+.completed {
+  text-decoration: line-through;
+}
+
+.completed span {
+  text-decoration: line-through;
+}
+
+.completed .todo-progress, .completed .todo-progress .todo-progress-inner {
+  background-color: var(--active-bg-color);
+}
+
+/* Todos page */
+.todos-page {
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+}
+
+/* Profile Page */
+.profile-page {
+  display: flex;
+  justify-content: center;
+}
+
+.rounded-background-profile-containter {
+  display: grid;
+  /* grid-template-columns: repeat(3, 1fr); */
+  grid-template-columns: auto 1fr 1fr;
+  grid-gap: 8px;
+  padding: 8px;
+}
+
+.rounded-background-profile-containter > * {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.2em 2em;
+}
+
+.profile {
+   /* background: white;
+   border-radius: 8px; */
+   grid-column: 1 / 2;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   text-align: center;
+   row-gap: 0.8em;
+}
+
+.login-form button {
+  border: 1px solid gray;
+  background: none;
+  border-radius: 8px;
+  padding: 1em;
+  width: 200px;
+}
+
+.profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.graph {
+  /* background: white;
+  border-radius: 8px; */
+  grid-column: 2 / 4;
+}
+
+.settings {
+  grid-column: span 3;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 1.2em;
+}
+
+.setting-item {
+  display: grid;
+  grid-column: span 4;
+  grid-template-rows: auto auto;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.setting-item h3{
+  grid-column: span 2;
+}
+
+/* .setting-item h3, .setting-item p {
+  grid-column: span 2;
+} */
+
+.setting-item input {
+  grid-column: 2 / 3;
+}
+
+.graph h2, .settings h2 {
+  text-align: center;
+}
+
+h2 {
+  text-align: center;
+  font-weight: 400;
+}
+
+.rounded-background > * {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.2em 2em;
+}
+
+.todos-page .rounded-background > * {
+  margin: 8px;
+}
+
+.todolist-options {
+  margin: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+}
+
+/* .todolist-options h2 {
+  grid-column: 1 / 5;
+} */
+
+.todo-list-selection select {
+  margin-left: 0.8em;
+  border: 1px solid gray;
+  background: white;
+  border-radius: 4px;
+  font-size: 1em;
+  /* padding: 0.6em 1em; */
+  padding: 0 1em;
+  height: 36px;
+}
+
+.todo-list-selection option, .todo-list-selection select {
+  cursor: pointer;
+}
+
+.add-todo {
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 4px;
+  width: 36px;
+  height: 36px;
+  justify-self: end;
+}
+
+.todo-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  background: rgba(0,0,0,0.5);
+  height: 100vh;
+  width: 100vw;
+}
+
+.todo-form-outer {
+  /* background: var(--main-bg-color); */
+  border-radius: 16px;
+  max-width: 400px;
+  max-height: 90vh;
+  background: rgb(243, 243, 243);
+  /* padding: 8px; */
+  overflow: auto;
+  box-shadow: var(--box-shadow);
+}
+
+.todo-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: stretch;
+  column-gap: 1em;
+  row-gap: 0.8em;
+}
+
+.todo-form-outer > * {
+  background: var(--main-bg-color);
+  border-radius: 16px;
+  padding: 1.2em 2em;
+  margin: 8px;
+}
+
+.todo-form label, .todo-form textarea, .todo-form legend, .time-input span {
+  margin-bottom: 0.2em;
+  grid-column: span 2;
+}
+
+.todo-form textarea {
+  resize: vertical;
+}
+
+.time-input {
+  grid-column: span 2;
+  display: grid;
+  grid-template: auto auto / repeat(6, auto);
+  column-gap: 0.8em;
+}
+
+.time-input span {
+ grid-column: span 6; 
+}
+
+.time-input label, .time-input input {
+  grid-column: span 1 !important;
+  align-self: center;
+  margin: 0 !important;
+}
+
+.time-input input {
+  width: 100%;
+}
+/* .todo-form fieldset {
+  grid-column: span 2;
+}
+
+.todo-form fieldset label, .todo-form fieldset input {
+  margin-right: 1em;
+} */
+
+.todo-form input, .todo-form textarea {
+  /* margin-bottom: 0.8em; */
+  border-radius: 4px;
+  border: 1px solid gray;
+  padding: 0.5em;
+  grid-column: span 2;
+}
+
+.todo-form button {
+  border: 1px solid gray;
+  background: none;
+  border-radius: 8px;
+  padding: 1em;
+}
+
+.timeForm {
+  border: none;
+}
+
+.outer-form {
+  display: grid;
+  justify-items: center;
+  row-gap: 0.8em;
+}
+
+.form-group {
+  grid-column: span 2;
+  display: grid;
+}
+
+.todo-form input[type="date"] {
+  margin-bottom: 0.2em;
+}
+
+/* Profile Page */
+.profile-page .rounded-background > *{
+  margin: 8px;
+}
+
+.login-form {
+  display: grid;
+  max-width: 200px;
+  row-gap: 0.8em;
+  justify-items: stretch;
+}
+
+.login-form label {
+  margin-bottom: 0.2em;
+}
+
+.login-form input {
+  padding: 0.5em;
+  border: 1px solid gray;
+  margin-bottom: 0.2em;
+}
+
+.login-form button {
+  grid-column: span 2;
+}
+
+.underline-link {
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+  justify-self: center;
+}
+
+.underline-link:hover {
+  text-decoration: underline;
+}
+
+.small-text {
+  font-size: 0.8em;
+  list-style-position: inside;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.profile-button {
+  border: 1px solid gray;
+  background: none;
+  border-radius: 8px;
+  padding: 1em;
+  width: 200px;
+}
+
+.regular-form {
+  max-width: 200px;
+  display: grid;
+  /* grid-template-columns: 1fr; */
+  row-gap: 0.8em;
+  justify-items: stretch;
+}
+
+.regular-form-outer {
+  display: grid;
+  justify-items: center;
+  /* text-align: center; */
+  row-gap: 0.8em;
+}
+
+.regular-form button {
+  width: 200px;
+  border: 1px solid gray;
+  background: none;
+  border-radius: 8px;
+  padding: 1em;
+}
+
+.regular-form label, .regular-form input {
+  margin-bottom: 0.2em;
+}
+
+.regular-form input {
+  padding: 0.5em;
+  border: 1px solid gray;
+}
+
+@media only screen and (max-width: 800px) {
+  .logo {
+    flex-grow: 0;
+    justify-content: flex-start;
+  }
+
+  header {
+    /* padding: 0 10%; */
+    padding: 0;
+    /* justify-content: space-between; */
+  }
+
+  .nav-link, .profile-link {
+    /* display: none; */
+    transition: color 200ms ease-in-out;
+    /* transition: background-color 200ms ease-in-out; */
+  }
+
+  .nav-icon {
+    margin: 0;
+  }
+
+  .nav-link-text {
+    display: none;
+  }
+
+  .timer-display {
+    font-size: 6em;
+  }
+
+  .rounded-background {
+    border-radius: 0;
+  }
+
+  /* .burger-icon {
+    display: flex;
+    font-size: 1.2em;
+    align-items: center;
+    padding: 0 1em;
+  } */
+
+  /* .burger-icon:hover {
+    background-color: var(--active-bg-color);
+  }
+
+  .burger-icon:hover .nav-drop-down {
+    display: relative;
+  } */
+}
