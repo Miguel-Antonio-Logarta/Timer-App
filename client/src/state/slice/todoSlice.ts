@@ -87,7 +87,10 @@ export const createTodo = createAsyncThunk(
 			if (response.ok) {
 				return camelCaseKeys(data);
 			} else {
-				return thunkAPI.rejectWithValue(data);
+				return thunkAPI.rejectWithValue(camelCaseKeys({
+					'code': response.status,
+					...data
+				}));
 			}
 		} catch (e: any) {
 			console.log("Error", e.response.data);
@@ -113,7 +116,10 @@ export const updateTodo = createAsyncThunk(
 			if (response.ok) {
 				return camelCaseKeys(data);
 			} else {
-				return thunkAPI.rejectWithValue(data);
+				return thunkAPI.rejectWithValue(camelCaseKeys({
+					'code': response.status,
+					...data
+				}));
 			}
 		} catch (e: any) {
 			console.log("Error", e.response.data);
@@ -203,6 +209,8 @@ interface todosState {
 	};
 	todoToEdit: TodoItem | undefined;
 	submittingForm: boolean;
+	createSuccess: boolean;
+	editSuccess: boolean;
 }
 
 // Define the initial state using that type
@@ -221,12 +229,20 @@ const initialState: todosState = {
 	editingTodo: false,
 	submittingForm: false,
 	todoToEdit: undefined,
+	createSuccess: false,
+	editSuccess: false,
 };
 
 export const todosSlice = createSlice({
 	name: "todos",
 	initialState,
 	reducers: {
+		clearTodoErrors: (state) => {
+			Object.values(state.errors.form).forEach((error) => (error = ""));
+			state.errors.other = {};
+			state.createSuccess = false;
+			state.editSuccess = false;
+		},
 		creatingNewTodo: (state, action: PayloadAction<boolean>) => {
 			state.createNewTodo = action.payload;
 			// Reset errors and isSubmitting
@@ -268,7 +284,8 @@ export const todosSlice = createSlice({
 			.addCase(createTodo.fulfilled, (state, action) => {
 				// Put it at the front since it is the newest todo
 				state.todos.unshift(action.payload);
-				state.createNewTodo = false;
+				// state.createNewTodo = false;
+				state.createSuccess = true;
 			})
 			.addCase(updateTodo.fulfilled, (state, action) => {
 				// Returns negative index if not found
@@ -292,7 +309,16 @@ export const todosSlice = createSlice({
 				if (index >= 0) {
 					state.todos[index].completed = action.payload.completed;
 				}
-			});
+			})
+			.addCase(createTodo.rejected, (state, action: PayloadAction<any>) => {
+				// Too lazy to output errors, so I'll just log it instead.
+				console.log("Server returned an error", action.payload);
+				state.createSuccess = false;
+			})
+			.addCase(updateTodo.rejected, (state, action: PayloadAction<any>) => {
+				console.log("Server, returned an error", action.payload);
+				state.editSuccess = false;
+			})
 	},
 });
 
@@ -303,6 +329,7 @@ export const {
 	setSubmitting,
 	stopEditingTodo,
 	toggleCompleteTodo,
+	clearTodoErrors
 } = todosSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type

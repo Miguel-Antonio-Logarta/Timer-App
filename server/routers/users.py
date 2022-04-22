@@ -7,6 +7,7 @@ import database
 import models
 import auth
 import re
+import json
 
 router = APIRouter(tags=['users'])
 
@@ -101,7 +102,14 @@ async def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Sessi
     elif not auth.verify_password(form_data.password, user.password):
         raise credentials_exception
 
-    access_token = auth.create_access_token(data={"user_id": user.id, "username": user.username})
+    user_info = {
+        "user_id": user.id, 
+        "username": user.username, 
+        "email": user.email, 
+        "created_on": user.created_on.isoformat()
+    }
+
+    access_token = auth.create_access_token(data=user_info)
     return {"access_token": access_token, "token_type": "bearer"}
 
 

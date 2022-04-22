@@ -5,9 +5,10 @@ import {
 	getCurrentUser,
 	snakeCaseKeys,
 } from "../../other/utilities";
-import { loginRequest, newPasswordForm, SignUpFormData } from "../../other/types";
+import { loginRequest, newPasswordForm, SignUpFormData, User } from "../../other/types";
 import Cookies from "universal-cookie";
 import jwtDecode from "jwt-decode";
+import { userInfo } from "os";
 
 
 export const requestLogIn = createAsyncThunk(
@@ -155,11 +156,12 @@ const checkValidToken = (): boolean => {
 	} 
 	return false;
 }
+
 // Define a type for the slice state
 interface authState {
 	isAuthenticated: boolean;
 	isFetching: boolean;
-	user: any | null;
+	user: User | null;
 	token: string | null;
 	serverErrors: serverErrors;
 	changeEmailSuccess: boolean;
@@ -171,7 +173,7 @@ interface authState {
 // token is not in there since it is just stored inside a cookie
 const initialState: authState = {
 	isAuthenticated: checkValidToken(),
-	user: null,
+	user: checkValidToken() ? getCurrentUser() : null,
 	token: null,
 	isFetching: false,
 	serverErrors: {
@@ -205,7 +207,7 @@ export const authSlice = createSlice({
 		},
 		logOut: (state) => {
 				const cookies = new Cookies();
-				cookies.remove('user');
+				cookies.remove('user', { path: '/' });
 				state.isAuthenticated = false;
 				state.user = null;
 		},
@@ -224,7 +226,7 @@ export const authSlice = createSlice({
 				const cookies = new Cookies();
 				cookies.set("user", {
 					accessToken: action.payload.accessToken,
-				});
+				}, { path: '/' });
 
 				state.isAuthenticated = true;
 				state.isFetching = false;
@@ -244,7 +246,7 @@ export const authSlice = createSlice({
 				const cookies = new Cookies();
 				cookies.set("user", {
 					accessToken: action.payload.accessToken,
-				});
+				}, { path: '/' });
 
 				state.isAuthenticated = true;
 				state.isFetching = false;
@@ -262,8 +264,10 @@ export const authSlice = createSlice({
 				state.isFetching = false;
 			})
 			.addCase(changeEmail.fulfilled, (state, action: PayloadAction<any>) => {
-				state.user.email = action.payload;
-				state.changeEmailSuccess = true;
+				if (state.user?.email) {
+					state.user.email = action.payload;
+					state.changeEmailSuccess = true;
+				}
 			})
 			.addCase(changeEmail.rejected, (state, action: PayloadAction<any>) => {
 				if (action.payload.code === 409) {

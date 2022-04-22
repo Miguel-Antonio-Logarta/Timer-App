@@ -25,11 +25,11 @@ const ProfilePage: React.FC = () => {
 		<div className="profile-page">
 			<div className="rounded-background">
 				<Outlet />
-				<div className="graph">
+				{/* <div className="graph">
 					<h2>Your Progress</h2>
 					{renderLineChart}
-				</div>
-				<div className="settings">
+				</div> */}
+				{/* <div className="settings">
 					<h2>Settings</h2>
 
 					<div className="setting-item">
@@ -58,7 +58,7 @@ const ProfilePage: React.FC = () => {
 						</p>
 						<input type="checkbox" />
 					</div>
-				</div>
+				</div> */}
 			</div>
 		</div>
 	);

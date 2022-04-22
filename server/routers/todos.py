@@ -11,6 +11,27 @@ import auth
 
 router = APIRouter(tags=['todos'])
 
+def validate_todo(todo_item):
+    # We need to add validation for todo items. Check title length, description length, timeSet > 0
+    errors = {}
+    if len(todo_item.title) == 0:
+        errors["title"] = "Title field is empty"
+    if len(todo_item.title) > 150:
+        errors["title"] = "Character limit of 150 reached. Please enter a shorter todo title"
+    
+    if todo_item.description is not None and len(todo_item.description) > 1500:
+        errors["description"] = "Character limit of 1500 reached. Please enter a shorter description"
+    
+    if (todo_item.time_left is not None and todo_item.time_left < 0):
+        errors["time_left"] = "Please enter a valid number over 0"    
+
+    # Raise exception if validation has failed
+    if len(errors) > 0:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=errors
+        )
+
 
 @router.get("/todos")
 async def get_todos(
@@ -87,6 +108,25 @@ async def create_todo(
         db: Session = Depends(database.get_db),
         current_user: int = Depends(auth.get_current_user)):
     # We need to add validation for todo items. Check title length, description length, timeSet > 0
+    # errors = {}
+    # if len(todo_item.title) == 0:
+    #     errors["title"] = "Title field is empty"
+    # if len(todo_item.title) > 150:
+    #     errors["title"] = "Character limit of 150 reached. Please enter a shorter todo title"
+    
+    # if todo_item.description is not None and len(todo_item.description) > 1500:
+    #     errors["description"] = "Character limit of 1500 reached. Please enter a shorter description"
+    
+    # if (todo_item.time_left is not None and todo_item.time_left < 0):
+    #     errors["time_left"] = "Please enter a valid number over 0"    
+    
+    # Raise exception if validation has failed
+    # if len(errors) > 0:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_409_CONFLICT,
+    #         detail=errors
+    #     )
+    validate_todo(todo_item)
     new_todo = models.Todo(owner_id=current_user.id, **todo_item.dict())
     db.add(new_todo)
     db.commit()
@@ -141,6 +181,8 @@ async def update_todo(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to perform requested action"
         )
+
+    validate_todo(updated_todo_item)
 
     for key, value in updated_todo_item.dict().items():
         setattr(todo_item, key, value)

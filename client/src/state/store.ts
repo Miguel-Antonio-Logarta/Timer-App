@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import timerReducer from "./slice/timerSlice"
 import todosReducer from './slice/todoSlice'
 import authReducer from "./slice/authSlice"
+import { checkTokenExpirationMiddleware } from './checkTokenExpirationMiddleware';
 
 const soundsMiddleware = require('redux-sounds');
 // Our soundsData is an object. The keys are the names of our sounds.
@@ -20,7 +21,9 @@ export const store = configureStore({
     todos: todosReducer,
     auth: authReducer
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(loadedSoundsMiddleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([loadedSoundsMiddleware]),
+  // We should just use a HOC to check if the token is valid every time the route changes.
+  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([loadedSoundsMiddleware, checkTokenExpirationMiddleware]),
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

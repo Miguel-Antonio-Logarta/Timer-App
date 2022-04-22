@@ -17,8 +17,8 @@ const ProfileOverview: React.FC = () => {
 			<h2>Welcome {user?.username ?? ""}!</h2>
 			{/* <div className="profile-picture" style={profileImageStyling}></div> */}
 			<div className="user-info">
-				<p>Email: insert email here</p>
-				<p>Joined: insert date joined here</p>
+				<p>Email: {user?.email ?? ""}</p>
+				<p>Joined: {user?.createdOn ?? ""}</p>
 			</div>
 			<Link to="changePassword">
 				<button className="profile-button blue-button">Change Password</button>

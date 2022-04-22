@@ -100,3 +100,10 @@ export interface newPasswordFormErrors extends PasswordErrors {
   newPassword: string;
   retypeNewPassword: string; 
 }
+
+export interface User {
+  UserId: number;
+  username: string;
+  email: string;
+  createdOn: string;
+}

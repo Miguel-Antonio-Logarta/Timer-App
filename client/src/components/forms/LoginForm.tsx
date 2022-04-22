@@ -82,9 +82,9 @@ const LoginForm: React.FC<Props> = () => {
 				</button>
 			</form>
 
-			<Link to="../forgotPassword" className="underline-link">
+			{/* <Link to="../forgotPassword" className="underline-link">
 				Forgot your password?
-			</Link>
+			</Link> */}
 			<Link to="../signUp" className="underline-link">
 				Or Sign Up Here!
 			</Link>

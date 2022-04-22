@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CreateTodoItem, TodoItemForm } from "../other/types";
 import { convertToMilliseconds } from "../other/utilities";
-import { useAppDispatch } from "../state/hooks";
-import { createTodo, creatingNewTodo } from "../state/slice/todoSlice";
+import { useAppDispatch, useAppSelector } from "../state/hooks";
+import { clearTodoErrors, createTodo, creatingNewTodo } from "../state/slice/todoSlice";
 import TodoForm from "./forms/TodoForm";
 
 const CreateTodo: React.FC = () => {
 	const dispatch = useAppDispatch();
-
+	const createSuccess = useAppSelector((state) => state.todos.createSuccess);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const createNewTodo = (data: TodoItemForm): void => {
 		const timeLeft: number = convertToMilliseconds({
 			hrs: data.hrs,
@@ -23,12 +24,23 @@ const CreateTodo: React.FC = () => {
 		};
 
 		dispatch(createTodo(todoItem));
-		dispatch(creatingNewTodo(false));
+		setIsSubmitting(true);
 	};
 
 	const handleDiscard = (): void => {
 		dispatch(creatingNewTodo(false));
+		dispatch(clearTodoErrors())
 	};
+
+	useEffect(() => {
+		// Only close the new todo form when there are not server errors.
+		if (createSuccess && isSubmitting) {
+			dispatch(creatingNewTodo(false));
+		}
+		return () => {
+			dispatch(clearTodoErrors())
+		};
+	}, [createSuccess, isSubmitting, dispatch])
 
 	return (
 		<div className="todo-modal">

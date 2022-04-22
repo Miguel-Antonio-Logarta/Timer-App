@@ -1,17 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { TodoItemForm, UpdateTodoItem } from "../other/types";
 import { convertToHMS, convertToMilliseconds } from "../other/utilities";
 import { useAppDispatch, useAppSelector } from "../state/hooks";
-import { updateTodo, stopEditingTodo } from "../state/slice/todoSlice";
+import { updateTodo, stopEditingTodo, clearTodoErrors } from "../state/slice/todoSlice";
 import TodoForm from "./forms/TodoForm";
 
 const EditTodo: React.FC = () => {
 	const dispatch = useAppDispatch();
-	const { todoToEdit } = useAppSelector((state) => state.todos);
+	const editSuccess = useAppSelector((state) => state.todos.editSuccess);
+	const todoToEdit = useAppSelector((state) => state.todos.todoToEdit);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const onSubmit = (data: TodoItemForm): void => {
-		console.log(data);
-
 		const timeLeft: number = convertToMilliseconds({
 			hrs: data.hrs,
 			mins: data.mins,
@@ -30,14 +30,13 @@ const EditTodo: React.FC = () => {
 			timeLeft: timeLeft <= 0 ? null : timeLeft,
 		};
 
-		console.log(todoItem);
-
 		dispatch(updateTodo(todoItem));
-		dispatch(stopEditingTodo());
+		setIsSubmitting(true);
 	};
 
 	const handleDiscard = (): void => {
 		dispatch(stopEditingTodo());
+		dispatch(clearTodoErrors());
 	};
 
 	// Check if this is right
@@ -48,8 +47,15 @@ const EditTodo: React.FC = () => {
 		...convertToHMS(todoToEdit?.timeLeft || 0),
 	};
 
-	// If todoToEdit is null, just return null
-	// Else return a form. This avoids all that checking.
+	useEffect(() => {
+		if (editSuccess && isSubmitting) {
+			dispatch(stopEditingTodo());
+		}
+		return () => {
+			dispatch(clearTodoErrors())
+		};
+	}, [editSuccess, isSubmitting, dispatch])
+
 	return (
 		<div className="todo-modal">
 			<div className="todo-form-outer">
